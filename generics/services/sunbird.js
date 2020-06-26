@@ -67,16 +67,36 @@ function callToSunbird(requestType, url, token, requestBody = "") {
   * @returns {JSON} - consist of learning resources list
 */
 
-const learningResources = function (token) {
+const learningResources = function (token,pageSize,pageNo) {
     return new Promise(async (resolve, reject) => {
-
-        const learningResourceApiUrl = constants.apiEndpoints.GET_RESOURCES_LIST;
-        let response = await callToSunbird("GET", learningResourceApiUrl, token);
-        return resolve(JSON.parse(response));
+        try {
+            const learningResourceApiUrl = constants.apiEndpoints.GET_RESOURCES_LIST+"?limit="+pageSize+"&page="+pageNo;
+            let response = await callToSunbird("GET", learningResourceApiUrl, token);
+            return resolve(JSON.parse(response));
+        } catch (error) {
+            reject(error)
+        }
+        
 
     })
 }
 
+const filtersList = function (token,pageSize,pageNo) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const categoryListApiUrl = constants.apiEndpoints.GET_CATEGORY_LIST;
+            let response = await callToSunbird("GET", categoryListApiUrl, token);
+            return resolve(JSON.parse(response));
+        } catch (error) {
+            reject(error)
+        }
+        
+
+    })
+}
+
+
 module.exports = {
-    learningResources: learningResources
+    learningResources: learningResources,
+    filtersList: filtersList
 };

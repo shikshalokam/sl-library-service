@@ -79,7 +79,7 @@ module.exports = class learningResources {
     return new Promise(async (resolve, reject) => {
       try {
 
-        let response = await learningResourceshelper.list(req.userDetails.userToken);
+        let response = await learningResourceshelper.list(req.userDetails.userToken,req.pageSize,req.pageNo);
         return resolve(response);
 
       } catch (error) {
@@ -97,4 +97,26 @@ module.exports = class learningResources {
     });
   }
 
+  
+  filtersList(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
+
+        let response = await learningResourceshelper.filtersList(req.userDetails.userToken);
+        return resolve(response);
+
+      } catch (error) {
+
+        return reject({
+          status:
+            error.status ||
+            httpStatusCode["internal_server_error"].status,
+
+          message:
+            error.message ||
+            httpStatusCode["internal_server_error"].message
+        });
+      }
+    });
+  }
 }
