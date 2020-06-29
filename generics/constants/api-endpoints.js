@@ -7,5 +7,5 @@
 
 module.exports = {
     GET_RESOURCES_LIST: "/learningResources/list",
-    GET_CATEGORY_LIST: "/learningResources/categoryList"
+    GET_CATEGORY_LIST: "/learningResources/filtersList"
 };

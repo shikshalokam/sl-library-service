@@ -6,4 +6,7 @@
  */
 
 
-module.exports = {};
+module.exports = {
+    SUNBIRD_SERVICE_DOWN: "Sunbird service is down",
+    FILTERS_FOUND:"filters featched successfully"
+};

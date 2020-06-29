@@ -12,22 +12,25 @@ let sunbirdService =
 /**
 * learning resource related information be here.
 * @method
-* @class  learningResourcesHelper
+* @class  LearningResourcesHelper
 */
 
-module.exports = class learningResourcesHelper {
+module.exports = class LearningResourcesHelper {
 
     /**
     * To get list of laerning resources
     * @method
     * @name  list
     * @param {String} token - user access token.
+    * @param {String} pageSize - page size of the request
+    * @param {String} pageNo - page no of the request
     * @returns {json} Response consists of list of learning resources
     */
-    static list(token,pageSize,pageNo) {
+    static list(token,pageSize,pageNo,board,gradeLevel,subject,medium) {
         return new Promise(async (resolve, reject) => {
             try {
-                let learningResources = await sunbirdService.learningResources(token,pageSize,pageNo);
+
+                let learningResources = await sunbirdService.learningResources(token,pageSize,pageNo,board,gradeLevel,subject,medium);
                 resolve(learningResources);
 
             } catch (error) {
@@ -38,17 +41,17 @@ module.exports = class learningResourcesHelper {
     }
 
     /**
-    * To get list of category
+    * To get list of filters
     * @method
-    * @name  categoryList
+    * @name  filtersList
     * @param {String} token - user access token.
     * @returns {json} Response consists of list of learning resources
     */
-   static filtersList(token,pageSize,pageNo) {
+   static filtersList(token) {
         return new Promise(async (resolve, reject) => {
             try {
 
-                let categoryList = await sunbirdService.filtersList(token,pageSize,pageNo);
+                let categoryList = await sunbirdService.filtersList(token);
                 let typeList = { };
 
                 categoryList.result.framework.categories.map(function(element){
@@ -58,7 +61,7 @@ module.exports = class learningResourcesHelper {
                     });
                     typeList[element.code] = list;
                 });                
-                resolve({ result: typeList });
+                resolve({ message:constants.apiResponses.FILTERS_FOUND, result: typeList });
 
             } catch (error) {
                 return reject(error);

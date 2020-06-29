@@ -10,6 +10,7 @@
 const request = require('request');
 
 
+
 /**
   * Call to sunbird api's. 
   * @function
@@ -59,39 +60,53 @@ function callToSunbird(requestType, url, token, requestBody = "") {
 }
 
 
-/**
-  * Get learning resources.
-  * @function
-  * @name learningResources
-  * @param token - Logged in user token.
-  * @returns {JSON} - consist of learning resources list
-*/
+    /**
+    * To get list of laerning resources
+    * @method
+    * @name  list
+    * @param {String} token - user access token.
+    * @param {String} pageSize - page size of the request
+    * @param {String} pageNo - page no of the request
+    * @returns {json} Response consists of list of learning resources
+    */
 
-const learningResources = function (token,pageSize,pageNo) {
+const learningResources = function (token,pageSize,pageNo,board,gradeLevel,subject,medium) {
     return new Promise(async (resolve, reject) => {
         try {
-            const learningResourceApiUrl = constants.apiEndpoints.GET_RESOURCES_LIST+"?limit="+pageSize+"&page="+pageNo;
+            const learningResourceApiUrl = constants.apiEndpoints.GET_RESOURCES_LIST+"?limit="+pageSize+
+            "&page="+pageNo+
+            "&board="+board+
+            "&gradeLevel="+gradeLevel+
+            "&subject="+subject+
+            "&medium="+medium;
+
             let response = await callToSunbird("GET", learningResourceApiUrl, token);
             return resolve(JSON.parse(response));
         } catch (error) {
-            reject(error)
+            reject({ message: constants.apiResponses.SUNBIRD_SERVICE_DOWN });
         }
         
 
     })
 }
 
-const filtersList = function (token,pageSize,pageNo) {
+/**
+  * Get filters of learning resources
+  * @function
+  * @name filtersList
+  * @param token - Logged in user token.
+  * @returns {JSON} - consist filters list of learning resources
+*/
+const filtersList = function (token) {
     return new Promise(async (resolve, reject) => {
         try {
             const categoryListApiUrl = constants.apiEndpoints.GET_CATEGORY_LIST;
             let response = await callToSunbird("GET", categoryListApiUrl, token);
             return resolve(JSON.parse(response));
         } catch (error) {
-            reject(error)
+           
+            reject({ message: constants.apiResponses.SUNBIRD_SERVICE_DOWN });
         }
-        
-
     })
 }
 
