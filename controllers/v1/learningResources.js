@@ -138,10 +138,10 @@ module.exports = class learningResources {
           req.userDetails.userToken,
           req.pageSize,
           req.pageNo,
-          req.query.board ? req.query.board : "",
-          req.query.gradeLevel ? req.query.gradeLevel : "",
-          req.query.subject ? req.query.subject : "",
-          req.query.medium ? req.query.medium : "" 
+          req.query.Category ? req.query.Category : "",
+          req.query.Subcategory ? req.query.Subcategory : "",
+          req.query.Topic ? req.query.Topic : "",
+          req.query.Language ? req.query.Language : "" 
           );
         return resolve(response);
 

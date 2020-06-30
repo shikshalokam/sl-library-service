@@ -6,4 +6,6 @@
  */
 
 
-module.exports = {};
+module.exports = {
+    CONTENT_PATH:"/resources/play/content/"
+};

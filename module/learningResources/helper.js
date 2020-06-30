@@ -26,12 +26,25 @@ module.exports = class LearningResourcesHelper {
     * @param {String} pageNo - page no of the request
     * @returns {json} Response consists of list of learning resources
     */
-    static list(token,pageSize,pageNo,board,gradeLevel,subject,medium) {
+    static list(token,pageSize,pageNo,category,subcategory,topic,language) {
         return new Promise(async (resolve, reject) => {
             try {
 
-                let learningResources = await sunbirdService.learningResources(token,pageSize,pageNo,board,gradeLevel,subject,medium);
-                resolve(learningResources);
+                let learningResources = await sunbirdService.learningResources(token,pageSize,pageNo,category,subcategory,topic,language);
+                
+                if(learningResources && learningResources.result && learningResources.result.data){
+                    let resourcesData = [];
+                    learningResources.result.data.map(resources=>{
+                         if(resources.identifier){
+                            resources['url']=  process.env.sunbird_url+constants.common.CONTENT_PATH+resources.identifier;
+                        }
+                        resourcesData.push(resources);
+                    });
+                    resolve({ message : learningResources.message, result: resourcesData });
+                }else{
+                    resolve(learningResources);
+                }
+                
 
             } catch (error) {
                 return reject(error);
@@ -59,7 +72,17 @@ module.exports = class LearningResourcesHelper {
                     element.terms.map(item=>{
                         list.push({ label:item.name,value:item.code });
                     });
-                    typeList[element.code] = list;
+
+                    if(element.code=="board"){
+                        typeList["Category"] = list;
+                    }else if(element.code=="gradeLevel"){
+                        typeList["Subcategory"] = list;
+                    } if(element.code=="subject"){
+                        typeList["Topic"] = list;
+                    }else if(element.code=="medium"){
+                        typeList["Language"] = list;
+                    }
+                    
                 });                
                 resolve({ message:constants.apiResponses.FILTERS_FOUND, result: typeList });
 
