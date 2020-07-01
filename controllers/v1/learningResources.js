@@ -130,11 +130,11 @@ module.exports = class learningResources {
    * @returns {json} Response consists list of learning resource
   */
 
-  list(req) {
+  all(req) {
     return new Promise(async (resolve, reject) => {
       try {
 
-        let response = await learningResourceshelper.list(
+        let response = await learningResourceshelper.all(
           req.userDetails.userToken,
           req.pageSize,
           req.pageNo,
@@ -143,6 +143,8 @@ module.exports = class learningResources {
           req.query.Topic ? req.query.Topic : "",
           req.query.Language ? req.query.Language : "" 
           );
+
+
         return resolve(response);
 
       } catch (error) {
