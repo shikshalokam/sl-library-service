@@ -18,107 +18,76 @@ module.exports = class learningResources {
   }
 
   /**
-  * @api {get} /library-service/api/v1/learningResources/list?limit=10&page=1  
-  * To get list of learning resources
+  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
+  * To get all learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/list?limit=10&page=1 
+  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics 
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
-  {
-    "message": "Learning resources found successfully",
+ {
+    "message": "Learning resources fetched successfully",
     "status": 200,
-    "result": {
-        "data": [
-            {
-                "ownershipType": [
-                    "createdBy"
-                ],
-                "live_link_start": "01:00",
-                "previewUrl": "https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/content/ecml/do_2127561039911895041422-latest",
-                "channel": "0127053482034872320",
-                "downloadUrl": "https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/ecar_files/do_2127561039911895041422/aws-10000-foot-overview-2019-course_1557205419155_do_2127561039911895041422_2.0.ecar",
-                "organisation": [
-                    "camino"
-                ],
-                "language": [
-                    "English"
-                ],
-                "mimeType": "application/vnd.ekstep.ecml-archive",
-                "variants": {
-                    "spine": {
-                        "ecarUrl": "https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/ecar_files/do_2127561039911895041422/aws-10000-foot-overview-2019-course_1557205419295_do_2127561039911895041422_2.0_spine.ecar",
-                        "size": 1319
-                    }
+    "result": [
+        {
+            "title": "Recently Added",
+            "type": "card",
+            "description": "Recently added",
+            "imageurl": "https:ssdsada.png",
+            "Totalcount": 4932,
+            "resources": [
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2130263126179512321922",
+                    "header": "TLE-GEN-HK-002-CPA001",
+                    "description": "Generic Housekeeping Public Area Cleaning Training",
+                    "time": "2020-05-22T05:40:51.995+0000"
                 },
-                "editorState": "{\"plugin\":{\"noOfExtPlugins\":14,\"extPlugins\":[{\"plugin\":\"org.ekstep.contenteditorfunctions\",\"version\":\"1.2\"},{\"plugin\":\"org.ekstep.keyboardshortcuts\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.richtext\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.iterator\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.navigation\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.mathtext\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.libs.ckeditor\",\"version\":\"1.1\"},{\"plugin\":\"org.ekstep.questionunit\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.keyboard\",\"version\":\"1.1\"},{\"plugin\":\"org.ekstep.questionunit.mcq\",\"version\":\"1.1\"},{\"plugin\":\"org.ekstep.questionunit.mtf\",\"version\":\"1.1\"},{\"plugin\":\"org.ekstep.questionunit.reorder\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.questionunit.sequence\",\"version\":\"1.0\"},{\"plugin\":\"org.ekstep.questionunit.ftb\",\"version\":\"1.0\"}]},\"stage\":{\"noOfStages\":1,\"currentStage\":\"e8595648-6453-43c1-a6da-c992e0959833\"},\"sidebar\":{\"selectedMenu\":\"settings\"}}",
-                "objectType": "Content",
-                "collections": [],
-                "live_link_end": "02:00",
-                "appId": "dev.camino.portal",
-                "contentEncoding": "gzip",
-                "artifactUrl": "https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/content/do_2127561039911895041422/artifact/1557205419022_do_2127561039911895041422.zip",
-                "lockKey": "7c86b955-b12c-4bcd-93ff-efa47b5078bb",
-                "contentType": "Resource",
-                "identifier": "do_2127561039911895041422",
-                "lastUpdatedBy": "1c4c01a5-36fe-45bb-8f96-0f7db8940883",
-                "audience": [
-                    "Learner"
-                ],
-                "visibility": "Default",
-                "consumerId": "83f22748-0d37-4bfc-b401-1fc88dedb178",
-                "mediaType": "content",
-                "osId": "org.ekstep.quiz.app",
-                "graph_id": "domain",
-                "nodeType": "DATA_NODE",
-                "lastPublishedBy": "e7281c98-1eb0-4774-8dd9-a6100f05870a",
-                "prevState": "Review",
-                "size": 5410,
-                "lastPublishedOn": "2019-05-07T05:03:39.155+0000",
-                "IL_FUNC_OBJECT_TYPE": "Content",
-                "name": " AWS - 10,000 Foot Overview (2019 course)",
-                "status": "Live",
-                "totalQuestions": 0,
-                "code": "org.sunbird.ZwoPJB",
-                "description": "Enter description for Resource",
-                "streamingUrl": "https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/content/ecml/do_2127561039911895041422-latest",
-                "idealScreenSize": "normal",
-                "createdOn": "2019-05-06T11:20:00.486+0000",
-                "live_link": "https://www.youtube.com/watch?v=3Z_WylQ06QI",
-                "duration": "1",
-                "contentDisposition": "inline",
-                "lastUpdatedOn": "2019-05-07T05:03:37.806+0000",
-                "SYS_INTERNAL_LAST_UPDATED_ON": "2019-05-07T05:03:39.780+0000",
-                "dialcodeRequired": "No",
-                "owner": "Williams Lee",
-                "creator": "Williams Lee",
-                "createdFor": [
-                    "0127053482034872320"
-                ],
-                "IL_SYS_NODE_TYPE": "DATA_NODE",
-                "os": [
-                    "All"
-                ],
-                "totalScore": 0,
-                "pkgVersion": 2,
-                "versionKey": "1557205418230",
-                "idealScreenDensity": "hdpi",
-                "framework": "niit_tv",
-                "s3Key": "ecar_files/do_2127561039911895041422/aws-10000-foot-overview-2019-course_1557205419155_do_2127561039911895041422_2.0.ecar",
-                "lastSubmittedOn": "2019-05-07T05:06:42.956+0000",
-                "createdBy": "1c4c01a5-36fe-45bb-8f96-0f7db8940883",
-                "compatibilityLevel": 2,
-                "activityType": "live Session",
-                "IL_UNIQUE_ID": "do_2127561039911895041422",
-                "ownedBy": "1c4c01a5-36fe-45bb-8f96-0f7db8940883",
-                "resourceType": "Learn",
-                "node_id": 444167
-            }
-        ],
-        "count": 4932
-    }
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2130262869306327041917",
+                    "header": "TLE-GEN-HK-001-HHS001",
+                    "description": "Generic Housekeeping Training Content for HHS",
+                    "time": "2020-05-22T04:48:36.336+0000"
+                },
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2129746320902225921869",
+                    "header": "Meet Harshitha, an Electronics Mechanic",
+                    "time": "2020-03-10T05:16:33.826+0000"
+                }
+            ]
+        },
+        {
+            "title": "Most Popular",
+            "type": "card",
+            "description": "Most popular",
+            "imageurl": "https:ssdsada.png",
+            "Totalcount": 4932,
+            "resources": [
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/domain_8862",
+                    "header": "वह हँस दिया",
+                    "description": "क्‍या आपको दौड़ लगाने में मज़ा आता है? हमारी कहानी के हिरण को भी यह बहुत भाता है। इस कहानी को पढ़े और सुने। कहानी उन बच्चों के लिए है जो अभी वाक्य  पढ़ना शुरू कर रहे हैं।  ",
+                    "rating": 56,
+                    "time": "2016-06-14T05:13:28.192+0000"
+                },
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_20044452",
+                    "header": "चाँद और तारे",
+                    "description": "चाँद और तारे",
+                    "rating": 17,
+                    "time": "2016-08-03T09:02:30.343+0000"
+                },
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_20043292",
+                    "header": "zoo1test2",
+                    "description": "zoo1test2",
+                    "rating": 13,
+                    "time": "2016-07-14T08:50:43.177+0000"
+                }
+            ]
+        }
+    ]
 }
   **/
 
@@ -161,6 +130,193 @@ module.exports = class learningResources {
       }
     });
   }
+
+
+    /**
+  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
+  * To get all learning resources
+  * @apiVersion 1.0.0
+  * @apiGroup Learning Resources
+  * @apiHeader {String} X-authenticated-user-token Authenticity token
+  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics 
+  * @apiUse successBody
+  * @apiUse errorBody
+  * @apiParamExample {json} Response:
+ {
+    "message": "Learning resources found successfully",
+    "status": 200,
+    "result": {
+        "title": "Most Popular",
+        "type": "card",
+        "description": "Most popular",
+        "imageurl": "https:ssdsada.png",
+        "Totalcount": 4932,
+        "resources": [
+            {
+                "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2125493655674306561553",
+                "header": "3087-21",
+                "description": "desc",
+                "time": "2018-07-18T09:09:36.492+0000"
+            }
+        ]
+    }
+}
+  **/
+
+  /**
+   * To get list of resources
+   * @method
+   * @name list
+   * @param  {req}  - requested data.
+   * @returns {json} Response consists list of learning resource
+  */
+
+ popular(req) {
+  return new Promise(async (resolve, reject) => {
+    try {
+
+      let response = await learningResourceshelper.popular(
+        req.userDetails.userToken,
+        req.pageSize,
+        req.pageNo,
+        req.query.Category ? req.query.Category : "",
+        req.query.Subcategory ? req.query.Subcategory : "",
+        req.query.Topic ? req.query.Topic : "",
+        req.query.Language ? req.query.Language : "" 
+        );
+
+
+      return resolve(response);
+
+    } catch (error) {
+
+      return reject({
+        status:
+          error.status ||
+          httpStatusCode["internal_server_error"].status,
+
+        message:
+          error.message ||
+          httpStatusCode["internal_server_error"].message
+      });
+    }
+  });
+}
+
+
+    /**
+  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
+  * To get all learning resources
+  * @apiVersion 1.0.0
+  * @apiGroup Learning Resources
+  * @apiHeader {String} X-authenticated-user-token Authenticity token
+  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics 
+  * @apiUse successBody
+  * @apiUse errorBody
+  * @apiParamExample {json} Response:
+ {
+    "message": "Learning resources fetched successfully",
+    "status": 200,
+    "result": [
+        {
+            "title": "Recently Added",
+            "type": "card",
+            "description": "Recently added",
+            "imageurl": "https:ssdsada.png",
+            "Totalcount": 4932,
+            "resources": [
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2130263126179512321922",
+                    "header": "TLE-GEN-HK-002-CPA001",
+                    "description": "Generic Housekeeping Public Area Cleaning Training",
+                    "time": "2020-05-22T05:40:51.995+0000"
+                },
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2130262869306327041917",
+                    "header": "TLE-GEN-HK-001-HHS001",
+                    "description": "Generic Housekeeping Training Content for HHS",
+                    "time": "2020-05-22T04:48:36.336+0000"
+                },
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2129746320902225921869",
+                    "header": "Meet Harshitha, an Electronics Mechanic",
+                    "time": "2020-03-10T05:16:33.826+0000"
+                }
+            ]
+        },
+        {
+            "title": "Most Popular",
+            "type": "card",
+            "description": "Most popular",
+            "imageurl": "https:ssdsada.png",
+            "Totalcount": 4932,
+            "resources": [
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/domain_8862",
+                    "header": "वह हँस दिया",
+                    "description": "क्‍या आपको दौड़ लगाने में मज़ा आता है? हमारी कहानी के हिरण को भी यह बहुत भाता है। इस कहानी को पढ़े और सुने। कहानी उन बच्चों के लिए है जो अभी वाक्य  पढ़ना शुरू कर रहे हैं।  ",
+                    "rating": 56,
+                    "time": "2016-06-14T05:13:28.192+0000"
+                },
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_20044452",
+                    "header": "चाँद और तारे",
+                    "description": "चाँद और तारे",
+                    "rating": 17,
+                    "time": "2016-08-03T09:02:30.343+0000"
+                },
+                {
+                    "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_20043292",
+                    "header": "zoo1test2",
+                    "description": "zoo1test2",
+                    "rating": 13,
+                    "time": "2016-07-14T08:50:43.177+0000"
+                }
+            ]
+        }
+    ]
+}
+  **/
+
+  /**
+   * To get list of resources
+   * @method
+   * @name list
+   * @param  {req}  - requested data.
+   * @returns {json} Response consists list of learning resource
+  */
+
+ recent(req) {
+  return new Promise(async (resolve, reject) => {
+    try {
+
+      let response = await learningResourceshelper.recent(
+        req.userDetails.userToken,
+        req.pageSize,
+        req.pageNo,
+        req.query.Category ? req.query.Category : "",
+        req.query.Subcategory ? req.query.Subcategory : "",
+        req.query.Topic ? req.query.Topic : "",
+        req.query.Language ? req.query.Language : "" 
+        );
+
+
+      return resolve(response);
+
+    } catch (error) {
+
+      return reject({
+        status:
+          error.status ||
+          httpStatusCode["internal_server_error"].status,
+
+        message:
+          error.message ||
+          httpStatusCode["internal_server_error"].message
+      });
+    }
+  });
+}
 
     /**
   * @api {get} /library-service/api/v1/learningResources/filtersList 

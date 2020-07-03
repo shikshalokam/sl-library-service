@@ -70,7 +70,7 @@ function callToSunbird(requestType, url, token, requestBody = "") {
     * @returns {json} Response consists of list of learning resources
     */
 
-const learningResources = function (token,pageSize,pageNo,board,gradeLevel,subject,medium) {
+const learningResources = function (token,pageSize,pageNo,board,gradeLevel,subject,medium,sortBy) {
     return new Promise(async (resolve, reject) => {
         try {
             const learningResourceApiUrl = constants.apiEndpoints.GET_RESOURCES_LIST+"?limit="+pageSize+
@@ -78,7 +78,8 @@ const learningResources = function (token,pageSize,pageNo,board,gradeLevel,subje
             "&board="+board+
             "&gradeLevel="+gradeLevel+
             "&subject="+subject+
-            "&medium="+medium;
+            "&medium="+medium+
+            "&sortBy="+sortBy;
 
             let response = await callToSunbird("GET", learningResourceApiUrl, token);
             return resolve(JSON.parse(response));
