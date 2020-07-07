@@ -91,7 +91,7 @@ module.exports = class LearningResourcesHelper {
               type: 'card',
               description: 'Most popular',
               totalCount: learningResources.result.count,
-              viewMoreurl: process.env.sunbird_url,
+              viewMoreUrl: process.env.sunbird_url,
               resources: resourcesData
             }
           });
