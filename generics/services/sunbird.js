@@ -12,7 +12,7 @@ const request = require('request');
 
 
 /**
-  * Call to sunbird api's. 
+  * Call to sunbird service. 
   * @function
   * @name callToSunbird
   * @param requestBody - Logged in user Id.
@@ -61,24 +61,29 @@ function callToSunbird(requestType, url, token, requestBody = "") {
 
 
     /**
-    * To get list of laerning resources
+    * To get list of learning resources
     * @method
-    * @name  list
+    * @name  learningResources
     * @param {String} token - user access token.
     * @param {String} pageSize - page size of the request
     * @param {String} pageNo - page no of the request
+    * @param {String} category - category of the learning resource
+    * @param {String} subCategory - subcategory of the learning resource
+    * @param {String} topic - topic of the learning resource
+    * @param {String} language - language of the learning resource
+    * @param {String} sortBy - sortBy option for the learning resource
     * @returns {json} Response consists of list of learning resources
     */
 
-const learningResources = function (token,pageSize,pageNo,board,gradeLevel,subject,medium,sortBy) {
+const learningResources = function (token,pageSize,pageNo,category,subCategory,topic,language,sortBy) {
     return new Promise(async (resolve, reject) => {
         try {
             const learningResourceApiUrl = constants.apiEndpoints.GET_RESOURCES_LIST+"?limit="+pageSize+
             "&page="+pageNo+
-            "&board="+board+
-            "&gradeLevel="+gradeLevel+
-            "&subject="+subject+
-            "&medium="+medium+
+            "&board="+category+
+            "&gradeLevel="+subCategory+
+            "&subject="+topic+
+            "&medium="+language+
             "&sortBy="+sortBy;
 
             let response = await callToSunbird("GET", learningResourceApiUrl, token);

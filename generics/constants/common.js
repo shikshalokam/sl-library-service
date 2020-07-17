@@ -7,5 +7,8 @@
 
 
 module.exports = {
-    CONTENT_PATH:"/resources/play/content/"
+    CONTENT_PATH:"/resources/play/content/",
+    RESOURCE_DASHBOARD: "/resources",
+    RECENT_FILTER: "recent",
+    POPULAR_FILTER: "popular"
 };

@@ -8,5 +8,9 @@
 
 module.exports = {
     SUNBIRD_SERVICE_DOWN: "Sunbird service is down",
-    FILTERS_FOUND:"filters featched successfully"
+    FILTERS_FOUND:"filters fetched successfully",
+    FILTERS_NOT_FOUND:"filters not found",
+    LEARNING_RESORCES_FOUND: "Learning resources found successfully",
+    LEARNING_RESORCES_NOT_FOUND: "Learning resources not found"
+
 };

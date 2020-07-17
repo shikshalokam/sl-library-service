@@ -2,7 +2,7 @@
  * name : learningResources.js
  * author : Rakesh Kumar
  * created-date : 24-Jun-2020
- * Description : related to learning resources
+ * Description : Related to learning resources
  */
 
 const learningResourceshelper = require(MODULES_BASE_PATH + "/learningResources/helper.js");
@@ -18,12 +18,12 @@ module.exports = class learningResources {
   }
 
   /**
-  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
-  * To get all learning resources
+  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics
+  * To get learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics 
+  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -107,10 +107,10 @@ module.exports = class learningResources {
           req.userDetails.userToken,
           req.pageSize,
           req.pageNo,
-          req.query.Category ? req.query.Category : "",
-          req.query.Subcategory ? req.query.Subcategory : "",
-          req.query.Topic ? req.query.Topic : "",
-          req.query.Language ? req.query.Language : "" 
+          req.query.category ? req.query.category : "",
+          req.query.subCategory ? req.query.subCategory : "",
+          req.query.topic ? req.query.topic : "",
+          req.query.language ? req.query.language : "" 
           );
 
 
@@ -133,12 +133,12 @@ module.exports = class learningResources {
 
 
     /**
-  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
-  * To get all learning resources
+  * @api {get} /library-service/api/v1/learningResources/popular?limit=10&page=1
+  * To get popular learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics 
+  * @apiSampleRequest /library-service/api/v1/learningResources/popular?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -164,7 +164,7 @@ module.exports = class learningResources {
   **/
 
   /**
-   * To get list of resources
+   * To get list of popular learning resources
    * @method
    * @name list
    * @param  {req}  - requested data.
@@ -179,10 +179,10 @@ module.exports = class learningResources {
         req.userDetails.userToken,
         req.pageSize,
         req.pageNo,
-        req.query.Category ? req.query.Category : "",
-        req.query.Subcategory ? req.query.Subcategory : "",
-        req.query.Topic ? req.query.Topic : "",
-        req.query.Language ? req.query.Language : "" 
+        req.query.category ? req.query.category : "",
+        req.query.subCategory ? req.query.subCategory : "",
+        req.query.topic ? req.query.topic : "",
+        req.query.language ? req.query.language : "" 
         );
 
 
@@ -205,12 +205,12 @@ module.exports = class learningResources {
 
 
     /**
-  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
-  * To get all learning resources
+  * @api {get} /library-service/api/v1/learningResources/recentlyAdded?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics
+  * To get recently added learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics 
+  * @apiSampleRequest /library-service/api/v1/learningResources/recentlyAdded?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -279,28 +279,26 @@ module.exports = class learningResources {
   **/
 
   /**
-   * To get list of resources
+   * To get list of recently added learning resources
    * @method
    * @name list
    * @param  {req}  - requested data.
    * @returns {json} Response consists list of learning resource
   */
 
- recent(req) {
+ recentlyAdded(req) {
   return new Promise(async (resolve, reject) => {
     try {
 
-      let response = await learningResourceshelper.recent(
+      let response = await learningResourceshelper.recentlyAdded(
         req.userDetails.userToken,
         req.pageSize,
         req.pageNo,
-        req.query.Category ? req.query.Category : "",
-        req.query.Subcategory ? req.query.Subcategory : "",
-        req.query.Topic ? req.query.Topic : "",
-        req.query.Language ? req.query.Language : "" 
+        req.query.category ? req.query.category : "",
+        req.query.subCategory ? req.query.subCategory : "",
+        req.query.topic ? req.query.topic : "",
+        req.query.language ? req.query.language : "" 
         );
-
-
       return resolve(response);
 
     } catch (error) {
@@ -329,7 +327,7 @@ module.exports = class learningResources {
   * @apiUse errorBody
   * @apiParamExample {json} Response:
     {
-    "message":"filters featched successfully",
+    "message":"filters fetched successfully",
     "status": 200,
       "result": {
          "medium": [
