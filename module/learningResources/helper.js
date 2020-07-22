@@ -192,6 +192,9 @@ module.exports = class LearningResourcesHelper {
         let categoryList = await sunbirdService.filtersList(token);
         let filters = [];
         if (categoryList) {
+
+          let libraryFilterForm =  await database.models.forms.findOne({ name:"libraryFilterForm" }); 
+
           categoryList.result.framework.categories.map(function (element) {
             let list = {
               options: []
@@ -200,39 +203,27 @@ module.exports = class LearningResourcesHelper {
               list.options.push({ label: item.name, value: item.code });
             });
 
-            list['visible'] = true;
+            let field = "";
             if (element.code == "board") {
-
-              list['label'] = "Category";
-              list['inputType'] = "select";
-              list['placeholder'] = "Select Category";
-              list['field'] = "category";
-
+              field ="category";
             } else if (element.code == "gradeLevel") {
-
-              list['label'] = "Sub category";
-              list['inputType'] = "select";
-              list['placeholder'] = "Select Sub Category";
-              list['field'] = "subCategory";
-
+              field ="subCategory";
             } if (element.code == "subject") {
-
-              list['label'] = "Topic";
-              list['inputType'] = "select";
-              list['placeholder'] = "Select Topic";
-              list['field'] = "topic";
-
+              field ="topic";
             } else if (element.code == "medium") {
-
-              list['label'] = "Language";
-              list['inputType'] = "select";
-              list['placeholder'] = "Select Language";
-              list['field'] = "language";
-
+              field ="language";
             }
-            filters.push(list)
+            
+            let inputFieldData = libraryFilterForm.value.filter(item=>{
+              if (item.field==field){
+                return item;
+              }
+            });
+            inputFieldData[0]['options'] = list.options;
+            filters.push(inputFieldData[0]);
 
           });
+        
 
           resolve({ message: constants.apiResponses.FILTERS_FOUND, result: filters });
         } else {

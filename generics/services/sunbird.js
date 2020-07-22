@@ -47,6 +47,7 @@ function callToSunbird(requestType, url, token, requestBody = "") {
         }
 
         function callback(err, data) {
+
             if (err) {
                 return reject({
                     message: constants.apiResponses.SUNBIRD_SERVICE_DOWN

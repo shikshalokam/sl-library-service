@@ -105,12 +105,12 @@ module.exports = class learningResources {
 
         let response = await learningResourceshelper.all(
           req.userDetails.userToken,
-          req.pageSize,
-          req.pageNo,
-          req.query.category ? req.query.category : "",
-          req.query.subCategory ? req.query.subCategory : "",
-          req.query.topic ? req.query.topic : "",
-          req.query.language ? req.query.language : "" 
+          req.body.pageSize,
+          req.body.pageNo,
+          req.body.category ? req.body.category : "",
+          req.body.subCategory ? req.body.subCategory : "",
+          req.body.topic ? req.body.topic : "",
+          req.body.language ? req.body.language : "" 
           );
 
 
@@ -290,6 +290,7 @@ module.exports = class learningResources {
   return new Promise(async (resolve, reject) => {
     try {
 
+      
       let response = await learningResourceshelper.recentlyAdded(
         req.userDetails.userToken,
         req.pageSize,
