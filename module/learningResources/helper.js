@@ -2,10 +2,10 @@
 * name : helper.js
 * author : Rakesh Kumar
 * created-date : 24-Jun-2020
-* Description : related to learning resources
+* Description : Related to learning resources
 */
 
-let sunbirdService =
+const sunbirdService =
   require(ROOT_PATH + "/generics/services/sunbird");
 
 /**
@@ -32,9 +32,9 @@ module.exports = class LearningResourcesHelper {
   static all(token, pageSize, pageNo, category, subCategory, topic, language) {
     return new Promise(async (resolve, reject) => {
       try {
+
         let popularResources = await this.popular(token, pageSize, pageNo, category, subCategory, topic, language);
         let recentResources = await this.recentlyAdded(token, pageSize, pageNo, category, subCategory, topic, language);
-
         let allResources = [];
         if (recentResources && recentResources.result) {
           allResources.push(recentResources.result);
@@ -42,7 +42,6 @@ module.exports = class LearningResourcesHelper {
         if (popularResources && popularResources.result) {
           allResources.push(popularResources.result);
         }
-
         resolve({ message: constants.apiResponses.LEARNING_RESORCES_FOUND, result: allResources });
 
       } catch (error) {
@@ -54,7 +53,7 @@ module.exports = class LearningResourcesHelper {
 
 
   /**
-  * To get list of learning resources
+  * To get list of popular learning resources
   * @method
   * @name  list
   * @param {String} token - user access token.
@@ -72,9 +71,7 @@ module.exports = class LearningResourcesHelper {
 
         let sortBy = constants.common.POPULAR_FILTER;
         let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, category, subcategory, topic, language, sortBy);
-
         if (learningResources && learningResources.result && learningResources.result.data) {
-
           let resourcesData = [];
           learningResources.result.data.map(resources => {
 
@@ -115,7 +112,7 @@ module.exports = class LearningResourcesHelper {
   }
 
   /**
-* To get list of learning resources
+* To get list of recently added learning resources
 * @method
 * @name  recentlyAdded
  * @param {String} token - user access token.
@@ -133,10 +130,7 @@ module.exports = class LearningResourcesHelper {
 
         let sortBy = constants.common.RECENT_FILTER;
         let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, category, subCategory, topic, language, sortBy);
-
         if (learningResources && learningResources.result && learningResources.result.data) {
-
-
           let resourcesData = [];
           learningResources.result.data.map(resources => {
 
@@ -147,7 +141,6 @@ module.exports = class LearningResourcesHelper {
             data['appIcon'] = resources.appIcon;
             data['title'] = resources.name;
             data['description'] = resources.description;
-            // data['redirect_url'] = '';
             data['rating'] = resources.me_totalRatings;
             data['time'] = resources.createdOn;
             resourcesData.push(data);
@@ -188,13 +181,11 @@ module.exports = class LearningResourcesHelper {
   static filtersList(token) {
     return new Promise(async (resolve, reject) => {
       try {
-
         let categoryList = await sunbirdService.filtersList(token);
         let filters = [];
         if (categoryList) {
 
-          let libraryFilterForm =  await database.models.forms.findOne({ name:"libraryFilterForm" }); 
-
+          let libraryFilterForm =  await database.models.forms.findOne({ name: constants.common.FILTER_FORM }); 
           categoryList.result.framework.categories.map(function (element) {
             let list = {
               options: []
@@ -213,7 +204,7 @@ module.exports = class LearningResourcesHelper {
             } else if (element.code == "medium") {
               field ="language";
             }
-            
+ 
             let inputFieldData = libraryFilterForm.value.filter(item=>{
               if (item.field==field){
                 return item;
@@ -223,14 +214,11 @@ module.exports = class LearningResourcesHelper {
             filters.push(inputFieldData[0]);
 
           });
-        
-
           resolve({ message: constants.apiResponses.FILTERS_FOUND, result: filters });
         } else {
           resolve({ status:httpStatusCode.not_found.status, message: constants.apiResponses.FILTERS_NOT_FOUND});
         }
-
-      } catch (error) {
+     } catch (error) {
         return reject(error);
       }
     })

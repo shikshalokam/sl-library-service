@@ -54,9 +54,9 @@ fs.existsSync(process.env.LOGGER_DIRECTORY) ||
 fs.mkdirSync(process.env.LOGGER_DIRECTORY);
 
 //API documentation (apidoc)
-if (process.env.NODE_ENV == "development" || process.env.NODE_ENV == "local") {
+if (process.env.APPLICATION_ENV == "development" || process.env.APPLICATION_ENV == "local") {
   app.use(express.static("apidoc"));
-  if (process.env.NODE_ENV == "local") {
+  if (process.env.APPLICATION_ENV == "local") {
     app.get(process.env.DEFAULT_APIDOC_URL, (req, res) => {
       let apidocPath =  process.env.APIDOC_PATH + "/index.html";
 
@@ -92,8 +92,7 @@ router(app);
 //listen to given port
 app.listen(config.port, () => {
 
-  logger.info("Environment: " +
-    (process.env.NODE_ENV ? process.env.NODE_ENV : process.env.DEFAULT_NODE_ENV));
+  logger.info("Environment: " + process.env.APPLICATION_ENV);
 
   logger.info("Application is running on the port:" + config.port);
 

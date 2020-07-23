@@ -130,6 +130,7 @@ module.exports = async function (req, res, next) {
       );
       return res.status(httpStatusCode["unauthorized"].status).send(respUtil(rspObj));
     } else {
+
       req.rspObj.userId = tokenData.userId;
       req.rspObj.userToken = req.headers["x-authenticated-user-token"];
       delete req.headers["x-authenticated-userid"];
@@ -137,9 +138,11 @@ module.exports = async function (req, res, next) {
       // rspObj.telemetryData.actor = utilsService.getTelemetryActorData(req);
       req.headers["x-authenticated-userid"] = tokenData.userId;
       req.rspObj = rspObj;
+
       shikshalokam
         .userInfo(token, tokenData.userId)
         .then(async userDetails => {
+
           if (userDetails.responseCode == "OK") {
             req.userDetails = userDetails.result.response;
             req.userDetails.userToken = req.rspObj.userToken

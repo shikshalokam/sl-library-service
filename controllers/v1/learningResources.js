@@ -11,19 +11,19 @@ const learningResourceshelper = require(MODULES_BASE_PATH + "/learningResources/
    * LearningResources
    * @class
 */
-module.exports = class learningResources {
+module.exports = class LearningResources {
 
   static get name() {
     return "learningResources";
   }
 
   /**
-  * @api {get} /library-service/api/v1/learningResources/all?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics
+  * @api {get} /library/api/v1/learningResources/all?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics
   * To get learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/all?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
+  * @apiSampleRequest /library/api/v1/learningResources/all?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -133,12 +133,12 @@ module.exports = class learningResources {
 
 
     /**
-  * @api {get} /library-service/api/v1/learningResources/popular?limit=10&page=1
+  * @api {get} /library/api/v1/learningResources/popular?limit=10&page=1
   * To get popular learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/popular?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
+  * @apiSampleRequest /library/api/v1/learningResources/popular?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -205,12 +205,12 @@ module.exports = class learningResources {
 
 
     /**
-  * @api {get} /library-service/api/v1/learningResources/recentlyAdded?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics
+  * @api {get} /library/api/v1/learningResources/recentlyAdded?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics
   * To get recently added learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/recentlyAdded?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
+  * @apiSampleRequest /library/api/v1/learningResources/recentlyAdded?limit=10&page=1&subCategory=class 1&category=cbse&&topic=mathematics 
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -318,71 +318,93 @@ module.exports = class learningResources {
 }
 
     /**
-  * @api {get} /library-service/api/v1/learningResources/filtersList 
+  * @api {get} /library/api/v1/learningResources/filtersList 
   * To get filters list of learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library-service/api/v1/learningResources/filtersList
+  * @apiSampleRequest /library/api/v1/learningResources/filtersList
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
-    {
-    "message":"filters fetched successfully",
+  {
+    "message": "filters fetched successfully",
     "status": 200,
-      "result": {
-         "medium": [
-            {
-                "label": "English",
-                "value": "english"
-            },
-            {
-                "label": "Hindi",
-                "value": "hindi"
-            },
-            {
-                "label": "Odia",
-                "value": "oriya"
-            },
-            {
-                "label": "Telugu",
-                "value": "telugu"
-            },
-            {
-                "label": "Kannada",
-                "value": "kannada"
-            },
-            {
-                "label": "Marathi",
-                "value": "marathi"
-            },
-            {
-                "label": "Assamese",
-                "value": "assamese"
-            },
-            {
-                "label": "Bengali",
-                "value": "bengali"
-            },
-            {
-                "label": "Gujarati",
-                "value": "gujarati"
-            },
-            {
-                "label": "Tamil",
-                "value": "tamil"
-            },
-            {
-                "label": "Urdu",
-                "value": "urdu"
-            },
-            {
-                "label": "Other",
-                "value": "other"
-            }
-        ]
-      }
-    }
+    "result": [
+        {
+            "field": "category",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "label": "Category",
+            "input": "select",
+            "validation": [],
+            "options": [
+                {
+                    "label": "sldev",
+                    "value": "sldev"
+                }
+            ]
+        },
+        {
+            "field": "language",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "label": "Language",
+            "input": "select",
+            "validation": [],
+            "options": [
+                {
+                    "label": "English",
+                    "value": "english"
+                },
+                {
+                    "label": "Tamil",
+                    "value": "tamil"
+                },
+                {
+                    "label": "Hindi",
+                    "value": "hindi"
+                },
+                {
+                    "label": "Kannada",
+                    "value": "kannada"
+                }
+            ]
+        },
+        {
+            "field": "subCategory",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "label": "Sub Category",
+            "input": "select",
+            "validation": [],
+            "options": [
+                {
+                    "label": "Class1",
+                    "value": "class1"
+                }
+            ]
+        },
+        {
+            "field": "topic",
+            "value": "",
+            "visible": true,
+            "editable": true,
+            "label": "Topic",
+            "input": "select",
+            "validation": [],
+            "options": [
+                {
+                    "label": "Science",
+                    "value": "science"
+                }
+            ]
+        }
+    ]
+}
   **/
 
   /**
