@@ -1,36 +1,35 @@
 /**
  * name : app.js.
  * author : Aman Karki.
- * created-date : 19-June-2020.
+ * created-date : 20-July-2020.
  * Description : Root file.
  */
 
-// Dependencies
-
 require("dotenv").config();
-global.config = require("./config");
+
+// Setup application config, establish DB connections and set global constants.
+global.config = require("./config/connections");
 require("./config/globals")();
 
-let router = require("./routes");
+// Check if all environment variables are provided.
+const environmentData = require("./envVariables")();
 
-//express
+if (!environmentData.success) {
+  LOGGER.error("Server could not start . Not all environment variable is provided");
+  process.exit();
+}
+
+// express
 const express = require("express");
-let app = express();
+const app = express();
 
 //required modules
 const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-var fs = require("fs");
-var path = require("path");
-var expressValidator = require('express-validator');
-
-let environmentData = require("./envVariables")();
-
-if (!environmentData.success) {
-  logger.warning("Server could not start . Not all environment variable is provided");
-  process.exit();
-}
+const fs = require("fs");
+const path = require("path");
+const expressValidator = require('express-validator');
 
 //To enable cors
 app.use(cors());
@@ -54,28 +53,21 @@ fs.existsSync(process.env.LOGGER_DIRECTORY) ||
 fs.mkdirSync(process.env.LOGGER_DIRECTORY);
 
 //API documentation (apidoc)
-if (process.env.APPLICATION_ENV == "development" || process.env.APPLICATION_ENV == "local") {
+if (process.env.APPLICATION_ENV == "development") {
   app.use(express.static("apidoc"));
-  if (process.env.APPLICATION_ENV == "local") {
-    app.get(process.env.DEFAULT_APIDOC_URL, (req, res) => {
-      let apidocPath =  process.env.APIDOC_PATH + "/index.html";
-
-      res.sendFile(path.join(__dirname, apidocPath));
-    });
-  } else {
-    app.get(process.env.APIDOC_URL, (req, res) => {
-      let urlArray = req.path.split("/");
-      urlArray.splice(0, 3);
-      let apidocPath = process.env.APIDOC_PATH + urlArray.join("/");
-
-      res.sendFile(path.join(__dirname, apidocPath));
-    });
-  }
+  
+  app.get(process.env.APIDOC_URL, (req, res) => {
+    let urlArray = req.path.split("/");
+    urlArray.splice(0, 3);
+    let apidocPath = process.env.APIDOC_PATH + urlArray.join("/");
+    res.sendFile(path.join(__dirname, apidocPath));
+  });
 }
 
-app.all(process.env.ALL_ROUTES, (req, res, next) => {
-  if(ENABLE_DEBUG_LOGGING === "ON") {
-    logger.info("Requests:", {
+app.all('*', (req, res, next) => {
+  
+  if(ENABLE_FILE_LOGGING === "ON") {
+    LOGGER.info("Requests:", {
       method: req.method,
       url: req.url,
       headers: req.headers,
@@ -83,18 +75,32 @@ app.all(process.env.ALL_ROUTES, (req, res, next) => {
     })
   }
 
+
+  if(process.env.ENABLE_CONSOLE_LOGGING === "ON") {
+    console.log("-------Request log starts here------------------");
+    console.log("Request URL: ", req.url);
+    console.log("Request Headers: ", req.headers);
+    console.log("Request Body: ", req.body);
+    console.log("Request Files: ", req.files);
+    console.log("-------Request log ends here------------------");
+  }
+
   next();
 });
+
+
+// Router module
+const router = require("./routes");
 
 //add routing
 router(app);
 
 //listen to given port
-app.listen(config.port, () => {
+app.listen(process.env.APPLICATION_PORT, () => {
 
-  logger.info("Environment: " + process.env.APPLICATION_ENV);
+  console.log("Environment : " + process.env.APPLICATION_ENV);
 
-  logger.info("Application is running on the port:" + config.port);
+  console.log("Application is running on the port : " + process.env.APPLICATION_PORT);
 
 });
 

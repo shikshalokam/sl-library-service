@@ -6,7 +6,7 @@
 */
 
 const sunbirdService =
-  require(ROOT_PATH + "/generics/services/sunbird");
+  require(GENERIC_SERVICES_PATH + "/sunbird");
 
 /**
 * Learning resource related information be here.
@@ -23,10 +23,10 @@ module.exports = class LearningResourcesHelper {
   * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {String} category - category of the learning resource
-  * @param {String} subCategory - subcategory of the learning resource
-  * @param {String} topic - topic of the learning resource
-  * @param {String} language - language of the learning resource
+  * @param {Array} category - array of categories for the learning resource
+  * @param {Array} subCategory - arary subcategories for the learning resource
+  * @param {Array} topic - array of topic's for the learning resource
+  * @param {Array} language - array of language's of the learning resource
   * @returns {json} Response consists of list of learning resources
   */
   static all(token, pageSize, pageNo, category, subCategory, topic, language) {
@@ -36,13 +36,26 @@ module.exports = class LearningResourcesHelper {
         let popularResources = await this.popular(token, pageSize, pageNo, category, subCategory, topic, language);
         let recentResources = await this.recentlyAdded(token, pageSize, pageNo, category, subCategory, topic, language);
         let allResources = [];
-        if (recentResources && recentResources.result) {
-          allResources.push(recentResources.result);
+        if (recentResources && recentResources.data) {
+          allResources.push(recentResources.data);
         }
-        if (popularResources && popularResources.result) {
-          allResources.push(popularResources.result);
+        if (popularResources && popularResources.data) {
+          allResources.push(popularResources.data);
         }
-        resolve({ message: constants.apiResponses.LEARNING_RESORCES_FOUND, result: allResources });
+        if(allResources && allResources.length >0){
+          resolve({
+            message: CONSTANTS.apiResponses.LEARNING_RESORCES_FOUND,
+            data: allResources,
+            success: true
+          });
+        }else{
+          resolve({
+            message: popularResources.message,
+            data: false,
+            success: true
+          });
+        }
+        
 
       } catch (error) {
         return reject(error);
@@ -59,25 +72,26 @@ module.exports = class LearningResourcesHelper {
   * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {String} category - category of the learning resource
-  * @param {String} subCategory - subcategory of the learning resource
-  * @param {String} topic - topic of the learning resource
-  * @param {String} language - language of the learning resource
+  * @param {Array} category - array of categories for the learning resource
+  * @param {Array} subCategory - arary subcategories for the learning resource
+  * @param {Array} topic - array of topic's for the learning resource
+  * @param {Array} language - array of language's of the learning resource
   * @returns {json} Response consists of list of learning resources
   */
   static popular(token, pageSize, pageNo, category, subcategory, topic, language) {
     return new Promise(async (resolve, reject) => {
       try {
 
-        let sortBy = constants.common.POPULAR_FILTER;
+        let sortBy = CONSTANTS.common.POPULAR_FILTER;
         let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, category, subcategory, topic, language, sortBy);
-        if (learningResources && learningResources.result && learningResources.result.data) {
+        if (learningResources && learningResources.result && learningResources.result.content) {
           let resourcesData = [];
-          learningResources.result.data.map(resources => {
+          
+          learningResources.result.content.map(resources => {
 
             let data = {};
             if (resources.identifier) {
-              data['url'] = process.env.sunbird_url + constants.common.CONTENT_PATH + resources.identifier;
+              data['url'] = process.env.SUNBIRD_URL + CONSTANTS.common.CONTENT_PATH + resources.identifier;
             }
             data['appIcon'] = resources.appIcon;
             data['title'] = resources.name;
@@ -87,26 +101,30 @@ module.exports = class LearningResourcesHelper {
             resourcesData.push(data);
           });
           resolve({
-            message: learningResources.message, result: {
+            message: learningResources.message,
+            data: {
               title: 'Most Popular',
               type: 'card',
-              description: `
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-               Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo 
-              consequat. Duis aute irure dolor in reprehenderit in voluptate 
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
+              description: ``,
               totalCount: learningResources.result.count,
-              viewMoreUrl: process.env.sunbird_url + constants.common.RESOURCE_DASHBOARD,
+              viewMoreUrl: process.env.SUNBIRD_URL + CONSTANTS.common.RESOURCE_DASHBOARD,
               resources: resourcesData
-            }
+            },
+            success: true
           });
         } else {
-          reject({ status:httpStatusCode.not_found.status, message: constants.apiResponses.LEARNING_RESORCES_NOT_FOUND });
+          resolve({
+            message: CONSTANTS.apiResponses.LEARNING_RESORCES_NOT_FOUND,
+            success: false,
+            data: false
+          });
         }
       } catch (error) {
-        return reject(error);
+        resolve({
+          message: error.message,
+          data: false,
+          success: false
+        });
       }
     })
   }
@@ -118,25 +136,25 @@ module.exports = class LearningResourcesHelper {
  * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {String} category - category of the learning resource
-  * @param {String} subCategory - subcategory of the learning resource
-  * @param {String} topic - topic of the learning resource
-  * @param {String} language - language of the learning resource
+  * @param {Array} category - array of categories for the learning resource
+  * @param {Array} subCategory - arary subcategories for the learning resource
+  * @param {Array} topic - array of topic's for the learning resource
+  * @param {Array} language - array of language's of the learning resources
 * @returns {json} Response consists of list of learning resources
 */
   static recentlyAdded(token, pageSize, pageNo, category, subCategory, topic, language) {
     return new Promise(async (resolve, reject) => {
       try {
 
-        let sortBy = constants.common.RECENT_FILTER;
+        let sortBy = CONSTANTS.common.RECENT_FILTER;
         let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, category, subCategory, topic, language, sortBy);
-        if (learningResources && learningResources.result && learningResources.result.data) {
+        if (learningResources && learningResources.result && learningResources.result.content) {
           let resourcesData = [];
-          learningResources.result.data.map(resources => {
+          learningResources.result.content.map(resources => {
 
             let data = {};
             if (resources.identifier) {
-              data['url'] = process.env.sunbird_url + constants.common.CONTENT_PATH + resources.identifier;
+              data['url'] = process.env.SUNBIRD_URL + CONSTANTS.common.CONTENT_PATH + resources.identifier;
             }
             data['appIcon'] = resources.appIcon;
             data['title'] = resources.name;
@@ -146,27 +164,31 @@ module.exports = class LearningResourcesHelper {
             resourcesData.push(data);
           });
           resolve({
-            message: learningResources.message, result: {
+            message: learningResources.message,
+            data: {
               title: "Recently Added",
               type: "card",
               imageUrl: "",
-              description: `
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
-              sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-               Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo 
-              consequat. Duis aute irure dolor in reprehenderit in voluptate 
-              velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat 
-              cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`,
-              "viewMoreUrl": process.env.sunbird_url + constants.common.RESOURCE_DASHBOARD,
+              description: ``,
+              "viewMoreUrl": process.env.SUNBIRD_URL + CONSTANTS.common.RESOURCE_DASHBOARD,
               totalCount: learningResources.result.count,
               resources: resourcesData
-            }
+            },
+            success: true
           });
         } else {
-          reject({ status:httpStatusCode.not_found.status, message: constants.apiResponses.LEARNING_RESORCES_NOT_FOUND });
+          resolve({
+            message: CONSTANTS.apiResponses.LEARNING_RESORCES_NOT_FOUND,
+            data: false,
+            success: false
+          });
         }
       } catch (error) {
-        return reject(error);
+        resolve({
+          message: error.message,
+          data: false,
+          success: false
+        });
       }
     })
   }
@@ -185,8 +207,9 @@ module.exports = class LearningResourcesHelper {
         let filters = [];
         if (categoryList) {
 
-          let libraryFilterForm =  await database.models.forms.findOne({ name: constants.common.FILTER_FORM }); 
-          categoryList.result.framework.categories.map(function (element) {
+
+          let libraryFilterForm = await database.models.forms.findOne({ name: CONSTANTS.common.FILTER_FORM });
+          categoryList.result.map(function (element) {
             let list = {
               options: []
             };
@@ -196,17 +219,17 @@ module.exports = class LearningResourcesHelper {
 
             let field = "";
             if (element.code == "board") {
-              field ="category";
+              field = "category";
             } else if (element.code == "gradeLevel") {
-              field ="subCategory";
+              field = "subCategory";
             } if (element.code == "subject") {
-              field ="topic";
+              field = "topic";
             } else if (element.code == "medium") {
-              field ="language";
+              field = "language";
             }
- 
-            let inputFieldData = libraryFilterForm.value.filter(item=>{
-              if (item.field==field){
+
+            let inputFieldData = libraryFilterForm.value.filter(item => {
+              if (item.field == field) {
                 return item;
               }
             });
@@ -214,12 +237,24 @@ module.exports = class LearningResourcesHelper {
             filters.push(inputFieldData[0]);
 
           });
-          resolve({ message: constants.apiResponses.FILTERS_FOUND, result: filters });
+          resolve({
+            message: CONSTANTS.apiResponses.FILTERS_FOUND,
+            data: filters,
+            success: true
+          });
         } else {
-          resolve({ status:httpStatusCode.not_found.status, message: constants.apiResponses.FILTERS_NOT_FOUND});
+          resolve({
+            message: CONSTANTS.apiResponses.FILTERS_NOT_FOUND,
+            data: false,
+            success: false
+          });
         }
-     } catch (error) {
-        return reject(error);
+      } catch (error) {
+        resolve({
+          message: error.message,
+          data: false,
+          success: false
+        });
       }
     })
   }

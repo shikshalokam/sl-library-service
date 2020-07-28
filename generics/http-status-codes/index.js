@@ -1,8 +1,8 @@
 /**
- * name : http-status-code/index.js
- * author : Rakesh Kumar
- * Date : 17-June-2020
- * Description : All http status code and there message.
+ * name : index.js
+ * author : Aman Karki
+ * Date : 20-July-2020
+ * Description : All http status code and messages.
  */
 
 module.exports = {

@@ -1,8 +1,8 @@
 /**
  * name : dataSetUpload.js
- * author : Rakesh Kumar
- * Date : 17-June-2020
- * Description : Data set upload functionality.
+ * author : Aman Karki
+ * Date : 20-July-2020
+ * Description : Data set upload middleware.
  */
 
 // Dependencies

@@ -1,7 +1,7 @@
 /**
  * name : http-request.js
- * author : Rakesh Kumar
- * Date : 17-June-2020
+ * author : Aman Karki
+ * Date : 20-July-2020
  * Description : all http requests.
  */
 
@@ -19,6 +19,7 @@ var convert = require('xml-js');
     * Request - all http related request.
     * @class
 */
+
 var Request = class Request {
     constructor() {}
 
@@ -105,11 +106,30 @@ var Request = class Request {
       * @returns {Function} Returns a function.
     */
 
-    get(url, options, path) {
-        options = options || {};
-
-        // Set method to GET and call it
-        options.method = 'GET';
+   get(url, options, path) {
+       options = options || {};
+       
+       // Set method to GET and call it
+       options.method = 'GET';
+       
+       // Add query parameters to URL
+       if(options.queryParameters) {
+           const countOfQueryParameters = Object.keys(options.queryParameters).length;
+           if(countOfQueryParameters > 0) {
+               const queryParamtersKeyArray = Object.keys(options.queryParameters);
+               url += "?";
+               
+               for (let pointerToQueryParamtersKeyArray = 0; pointerToQueryParamtersKeyArray < countOfQueryParameters; pointerToQueryParamtersKeyArray++) {
+                   const queryKey = queryParamtersKeyArray[pointerToQueryParamtersKeyArray];
+                   if(options.queryParameters[queryKey] != "") {
+                       url += `${queryKey}=${options.queryParameters[queryKey]}&`;
+                    } else {
+                        url += `${queryKey}&`;
+                    }
+                }
+                url = url.substring(0, url.length - 1);
+            }
+        }
         return this._request(url, options, null, path);
     }
 
@@ -163,7 +183,6 @@ var Request = class Request {
         });
     }
 }
-
 
 module.exports = Request
 

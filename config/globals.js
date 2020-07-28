@@ -1,7 +1,7 @@
 /**
  * name : globals.js
  * author : Aman Karki
- * created-date : 19-June-2020
+ * created-date : 20-July-2020
  * Description : Globals data.
 */
 
@@ -9,39 +9,34 @@
 
 const fs = require("fs");
 const path = require("path");
-let requireAll = require("require-all");
-var bunyan = require("bunyan"),
-  bunyanFormat = require('bunyan-format'),
-  formatOut = bunyanFormat({ outputMode: 'short' });
-
-gen = Object.assign(global, {});
+const requireAll = require("require-all");
+const bunyan = require("bunyan");
+const bunyanFormat = require('bunyan-format');
+const formatOut = bunyanFormat({ outputMode: 'short' });
 
 module.exports = function () {
-
   global.async = require("async");
-  global.ROOT_PATH = path.join(__dirname, '..');
-  global.MODULES_BASE_PATH = ROOT_PATH + "/module";
-  global.GENERIC_HELPERS_PATH = ROOT_PATH + "/generics/helpers";
+  global.PROJECT_ROOT_DIRECTORY = path.join(__dirname, '..');
+  global.MODULES_BASE_PATH = PROJECT_ROOT_DIRECTORY + "/module";
+  global.GENERICS_FILES_PATH = PROJECT_ROOT_DIRECTORY + "/generics";
+  global.GENERIC_HELPERS_PATH = GENERICS_FILES_PATH + "/helpers";
+  global.GENERIC_MIDDLEWARE_PATH = GENERICS_FILES_PATH + "/middleware";
+  global.GENERIC_SERVICES_PATH = GENERICS_FILES_PATH + "/services";
   global._ = require("lodash");
-  gen.utils = require(ROOT_PATH + "/generics/helpers/utils");
-  global.config = require(".");
+  global.UTILS = require(GENERIC_HELPERS_PATH + "/utils");
+  require("./connections");
 
-  global.ENABLE_DEBUG_LOGGING = 
-  process.env.ENABLE_DEBUG_LOGGING 
-  || process.env.DEFAULT_ENABLE_DEBUG_LOGGING;
+  global.ENABLE_CONSOLE_LOGGING = process.env.ENABLE_CONSOLE_LOGGING || "OFF";
+  global.ENABLE_FILE_LOGGING = process.env.ENABLE_FILE_LOGGING || "OFF";
 
-  global.locales = [];
+  global.HTTP_STATUS_CODE = 
+  require(GENERICS_FILES_PATH + "/http-status-codes");
 
-  global.httpStatusCode = 
-  require(ROOT_PATH + "/generics/http-status-codes");
-
-  global.REQUEST_TIMEOUT_FOR_REPORTS = 
-  process.env.REQUEST_TIMEOUT_FOR_REPORTS || 
-  process.env.DEFAULT_REQUEST_TIMEOUT_FOR_REPORTS;
+  global.REQUEST_TIMEOUT_FOR_REPORTS = process.env.REQUEST_TIMEOUT_FOR_REPORTS;
 
   // Load database models.
   global.models = requireAll({
-    dirname: ROOT_PATH + "/models",
+    dirname: PROJECT_ROOT_DIRECTORY + "/models",
     filter: /(.+)\.js$/,
     resolve: function (Model) {
       return Model;
@@ -49,7 +44,7 @@ module.exports = function () {
   });
 
   //load base v1 controllers
-  let pathToController = ROOT_PATH + "/controllers/v1/";
+  const pathToController = PROJECT_ROOT_DIRECTORY + "/controllers/v1/";
 
   fs.readdirSync(pathToController).forEach(function (file) {
     checkWhetherFolderExistsOrNot(pathToController, file);
@@ -69,7 +64,7 @@ module.exports = function () {
 
     if (folderExists) {
       fs.readdirSync(pathToFolder + file).forEach(function (folderOrFile) {
-        checkWhetherFolderExistsOrNor(pathToFolder + file + "/", folderOrFile);
+        checkWhetherFolderExistsOrNot(pathToFolder + file + "/", folderOrFile);
       })
 
     } else {
@@ -82,49 +77,61 @@ module.exports = function () {
 
   // Schema for db.
   global.schemas = new Array
-  fs.readdirSync(ROOT_PATH + '/models/').forEach(function (file) {
+  fs.readdirSync(PROJECT_ROOT_DIRECTORY + '/models/').forEach(function (file) {
     if (file.match(/\.js$/) !== null) {
       var name = file.replace('.js', '');
-      global.schemas[name] = require(ROOT_PATH + '/models/' + file);
+      global.schemas[name] = require(PROJECT_ROOT_DIRECTORY + '/models/' + file);
     }
   });
 
   // All controllers
   global.controllers = requireAll({
-    dirname: ROOT_PATH + "/controllers",
+    dirname: PROJECT_ROOT_DIRECTORY + "/controllers",
     resolve: function (Controller) {
       return new Controller();
     }
   });
 
   // Message constants
-  global.constants = new Array
-  fs.readdirSync(ROOT_PATH + "/generics/constants")
+  global.CONSTANTS = new Array
+  fs.readdirSync(GENERICS_FILES_PATH + "/constants")
   .forEach(function (file) {
     if (file.match(/\.js$/) !== null) {
       let name = file.replace('.js', '');
-      name = gen.utils.hyphenCaseToCamelCase(name);
-      global.constants[name] = 
-      require(ROOT_PATH + "/generics/constants/" + file);
+      name = UTILS.hyphenCaseToCamelCase(name);
+      global.CONSTANTS[name] = 
+      require(GENERICS_FILES_PATH + "/constants/" + file);
     }
   });
 
-  let loggerPath = ROOT_PATH + "/logs/" + process.pid + "-all.log";
-  
-  // Load logger file
-  global.logger = bunyan.createLogger({
+  // Load log file
+  global.LOGGER = bunyan.createLogger({
     name: 'information',
     level: "debug",
     streams: [{
       stream: formatOut
     }, {
       type: "rotating-file",
-      path: loggerPath,
+      path: PROJECT_ROOT_DIRECTORY + "/logs/debug.log",
       period: "1d", // daily rotation
       count: 3 // keep 3 back copies
     }]
   });
 
-  global.sessions = {};
+  // Load exception log file
+  global.EXCEPTION_LOGGER = bunyan.createLogger({
+    name: 'information',
+    level: "debug",
+    streams: [{
+      stream: formatOut
+    }, {
+      type: "rotating-file",
+      path: PROJECT_ROOT_DIRECTORY + "/logs/exceptions.log",
+      period: "1d", // daily rotation
+      count: 3 // keep 3 back copies
+    }]
+  });
+
+  global.SESSIONS = {};
 
 };

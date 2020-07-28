@@ -1,7 +1,7 @@
 /**
- * name : middleware/pagination.js
- * author : Rakesh Kumar 
- * Date : 17-June-2020
+ * name : pagination.js
+ * author : Aman Karki
+ * Date : 20-July-2020
  * Description : Pagination
  */
 

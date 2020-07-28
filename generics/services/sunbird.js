@@ -34,7 +34,7 @@ function callToSunbird(requestType, url, token, requestBody = "") {
         };
 
         if (requestType != "GET") {
-            options['json'] = { request: requestBody };
+            options['json'] = requestBody;
         }
 
         url = process.env.SUNBIRD_SERIVCE_HOST + process.env.SUNBIRD_SERIVCE_BASE_URL + process.env.URL_PREFIX + url;
@@ -50,7 +50,7 @@ function callToSunbird(requestType, url, token, requestBody = "") {
 
             if (err) {
                 return reject({
-                    message: constants.apiResponses.SUNBIRD_SERVICE_DOWN
+                    message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN
                 });
             } else {
                 return resolve(data.body);
@@ -68,10 +68,10 @@ function callToSunbird(requestType, url, token, requestBody = "") {
     * @param {String} token - user access token.
     * @param {String} pageSize - page size of the request
     * @param {String} pageNo - page no of the request
-    * @param {String} category - category of the learning resource
-    * @param {String} subCategory - subcategory of the learning resource
-    * @param {String} topic - topic of the learning resource
-    * @param {String} language - language of the learning resource
+    * @param {Array} category - array of category for the learning resource
+    * @param {Array} subCategory - array of subcategory for the learning resource
+    * @param {Array} topic -  array of topic for the learning resource
+    * @param {Array} language - array of language for the learning resource
     * @param {String} sortBy - sortBy option for the learning resource
     * @returns {json} Response consists of list of learning resources
     */
@@ -79,18 +79,22 @@ function callToSunbird(requestType, url, token, requestBody = "") {
 const learningResources = function (token,pageSize,pageNo,category,subCategory,topic,language,sortBy) {
     return new Promise(async (resolve, reject) => {
         try {
-            const learningResourceApiUrl = constants.apiEndpoints.GET_RESOURCES_LIST+"?limit="+pageSize+
-            "&page="+pageNo+
-            "&board="+category+
-            "&gradeLevel="+subCategory+
-            "&subject="+topic+
-            "&medium="+language+
-            "&sortBy="+sortBy;
-
-            let response = await callToSunbird("GET", learningResourceApiUrl, token);
-            return resolve(JSON.parse(response));
+            const learningResourceApiUrl = CONSTANTS.endpoints.GET_RESOURCES_LIST
+            
+            let filters = {
+                limit:pageSize,
+                page:pageNo,
+                board:category,
+                gradeLevel:subCategory,
+                subject:topic,
+                medium:language,
+                sortBy:sortBy
+            }
+            
+            let response = await callToSunbird("POST", learningResourceApiUrl, token,filters);
+            return resolve(response);
         } catch (error) {
-            reject({ message: constants.apiResponses.SUNBIRD_SERVICE_DOWN });
+            reject({ message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN });
         }
         
 
@@ -107,12 +111,12 @@ const learningResources = function (token,pageSize,pageNo,category,subCategory,t
 const filtersList = function (token) {
     return new Promise(async (resolve, reject) => {
         try {
-            const categoryListApiUrl = constants.apiEndpoints.GET_CATEGORY_LIST;
+            const categoryListApiUrl = CONSTANTS.endpoints.GET_CATEGORY_LIST;
             let response = await callToSunbird("GET", categoryListApiUrl, token);
             return resolve(JSON.parse(response));
         } catch (error) {
            
-            reject({ message: constants.apiResponses.SUNBIRD_SERVICE_DOWN });
+            reject({ message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN });
         }
     })
 }

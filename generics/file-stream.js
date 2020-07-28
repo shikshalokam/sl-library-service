@@ -1,22 +1,23 @@
 /**
  * name : file-stream.js
- * author : Rakesh Kumar
- * Date : 17-June-2020
+ * author : Aman Karki
+ * Date : 20-July-2020
  * Description : json2csvtransform (Streaming API).
  */
 
+// Dependencies
 const json2Csv = require('json2csv').Transform;
 const stream = require("stream");
 const fs = require("fs");
 const moment = require("moment-timezone");
-const DEFAULT_REPORTS_PATH = gen.utils.checkIfEnvDataExistsOrNot("DEFAULT_REPORTS_PATH");
+const DEFAULT_REPORTS_PATH = process.env.REPORTS_PATH;
 
 /**
     * FileStream
     * @class
 */
 
-let FileStream = class FileStream {
+const FileStream = class FileStream {
 
   constructor(fileName) {
     const currentDate = new Date();

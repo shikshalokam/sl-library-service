@@ -12,12 +12,12 @@
 */
 module.exports = class Forms extends Abstract {
     constructor() {
-      super(schemas["forms"]);
+      super("forms");
     }
   
     static get name() {
       return "forms";
     }
   
-  };
+};
   
