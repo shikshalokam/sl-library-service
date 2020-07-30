@@ -16,14 +16,23 @@ module.exports = class LearningResources {
   static get name() {
     return "learningResources";
   }
- 
+
   /**
-  * @api {get} /library/api/v1/learningResources/all
+  * @api {post} /library/api/v1/learningResources/all
   * To get learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library/api/v1/learningResources/all?limit=1&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
+  * @apiSampleRequest /library/api/v1/learningResources/all?limit=3&page=1
+  * @apiParamExample {json} Request:
+  * {
+  *    "filters": {
+  *     "category": ["SLDEV"],
+  *     "subcategory": ["Class 1"],
+  *     "topic: ["Science"],
+  *     "language": ["kannada","English"] 
+  *    }
+  * }
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -107,12 +116,9 @@ module.exports = class LearningResources {
           req.userDetails.userToken,
           req.pageSize,
           req.pageNo,
-          req.query.category ? req.query.category : "",
-          req.query.subCategory ? req.query.subCategory : "",
-          req.query.topic ? req.query.topic : "",
-          req.query.language ? req.query.language : ""
-          );
-          return resolve({ result:response.data,message:response.message });
+          req.body.filters ? req.body.filters : {}
+        );
+        return resolve({ result: response.data, message: response.message });
 
       } catch (error) {
 
@@ -130,36 +136,45 @@ module.exports = class LearningResources {
   }
 
 
-    /**
-  * @api {get} /library/api/v1/learningResources/popular
-  * To get popular learning resources
-  * @apiVersion 1.0.0
-  * @apiGroup Learning Resources
-  * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library/api/v1/learningResources/popular?limit=1&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
-  * @apiUse successBody
-  * @apiUse errorBody
-  * @apiParamExample {json} Response:
- {
-    "message": "Learning resources found successfully",
-    "status": 200,
-    "result": {
-        "title": "Most Popular",
-        "type": "card",
-        "description": "Most popular",
-        "imageurl": "https:ssdsada.png",
-        "Totalcount": 4932,
-        "resources": [
-            {
-                "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2125493655674306561553",
-                "header": "3087-21",
-                "description": "desc",
-                "time": "2018-07-18T09:09:36.492+0000"
-            }
-        ]
-    }
+  /**
+* @api {post} /library/api/v1/learningResources/popular
+* To get popular learning resources
+* @apiVersion 1.0.0
+* @apiGroup Learning Resources
+* @apiHeader {String} X-authenticated-user-token Authenticity token
+* @apiSampleRequest /library/api/v1/learningResources/popular?limit=3&page=1
+* @apiParamExample {json} Request:
+* {
+*    "filters": {
+*     "category": ["SLDEV"],
+*     "subcategory": ["Class 1"],
+*     "topic: ["Science"],
+*     "language": ["kannada","English"] 
+*    }
+* }
+* @apiUse successBody
+* @apiUse errorBody
+* @apiParamExample {json} Response:
+{
+  "message": "Learning resources found successfully",
+  "status": 200,
+  "result": {
+      "title": "Most Popular",
+      "type": "card",
+      "description": "Most popular",
+      "imageurl": "https:ssdsada.png",
+      "Totalcount": 4932,
+      "resources": [
+          {
+              "redirect_url": "https://dev.shikshalokam.org/resources/play/content/do_2125493655674306561553",
+              "header": "3087-21",
+              "description": "desc",
+              "time": "2018-07-18T09:09:36.492+0000"
+          }
+      ]
+  }
 }
-  **/
+**/
 
   /**
    * To get list of popular learning resources
@@ -169,86 +184,92 @@ module.exports = class LearningResources {
    * @returns {json} Response consists list of learning resource
   */
 
- popular(req) {
-  return new Promise(async (resolve, reject) => {
-    try {
+  popular(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
 
-      let response = await learningResourceshelper.popular(
-        req.userDetails.userToken,
-        req.query.pageSize,
-        req.query.pageNo,
-        req.query.category ? req.query.category : "",
-        req.query.subCategory ? req.query.subCategory : "",
-        req.query.topic ? req.query.topic : "",
-        req.query.language ? req.query.language : ""
+        let response = await learningResourceshelper.popular(
+          req.userDetails.userToken,
+          req.pageSize,
+          req.pageNo,
+          req.body.filters ? req.body.filters : {}
         );
-        return resolve({ result:response.data,message:response.message });
+        return resolve({ result: response.data, message: response.message });
 
-    } catch (error) {
+      } catch (error) {
 
-      return reject({
-        status:
-          error.status ||
-          HTTP_STATUS_CODE["internal_server_error"].status,
+        return reject({
+          status:
+            error.status ||
+            HTTP_STATUS_CODE["internal_server_error"].status,
 
-        message:
-          error.message ||
-          HTTP_STATUS_CODE["internal_server_error"].message
-      });
-    }
-  });
+          message:
+            error.message ||
+            HTTP_STATUS_CODE["internal_server_error"].message
+        });
+      }
+    });
+  }
+
+
+  /**
+* @api {get} /library/api/v1/learningResources/recentlyAdded
+* To get recently added learning resources
+* @apiVersion 1.0.0
+* @apiGroup Learning Resources
+* @apiHeader {String} X-authenticated-user-token Authenticity token
+* @apiSampleRequest /library/api/v1/learningResources/recentlyAdded?limit=1&page=1
+* @apiParamExample {json} Request:
+* {
+*    "filters": {
+*     "category": ["SLDEV"],
+*     "subCategory": ["Class 1"],
+*     "topic: ["Science"],
+*     "language": ["kannada","English"] 
+*    }
+* }
+* @apiUse successBody
+* @apiUse errorBody
+* @apiParamExample {json} Response:
+{
+  "message": "Learning resources found successfully",
+  "status": 200,
+  "result": [
+      {
+          "title": "Recently Added",
+          "type": "card",
+          "imageUrl": "",
+          "description": "",
+          "viewMoreUrl": "https://dev.bodh.shikshalokam.org/search/Library/1",
+          "totalCount": 12,
+          "resources": [
+              {
+                  "url": "https://dev.bodh.shikshalokam.org/resources/play/content/do_113059738078953472141",
+                  "title": "Layout Quiz",
+                  "description": "Layout Quiz",
+                  "time": "2020-07-08T11:05:08.467+0000"
+              },
+             ]
+      },
+      {
+          "title": "Most Popular",
+          "type": "card",
+          "description": "",
+          "totalCount": 12,
+          "viewMoreUrl": "https://dev.bodh.shikshalokam.org/search/Library/1",
+          "resources": [
+              {
+                  "url": "https://dev.bodh.shikshalokam.org/resources/play/content/do_113069088011886592166",
+                  "appIcon": "https://sldevsunbird.blob.core.windows.net/sl-dev-assets/content/do_113069088011886592166/artifact/bodh-2-01-01-1-1.thumb.png",
+                  "title": "YouTube_Testing",
+                  "description": "YouTube_Testing",
+                  "time": "2020-07-21T16:07:37.702+0000"
+              }
+          ]
+      }
+  ]
 }
-
-
-    /**
-  * @api {get} /library/api/v1/learningResources/recentlyAdded
-  * To get recently added learning resources
-  * @apiVersion 1.0.0
-  * @apiGroup Learning Resources
-  * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library/api/v1/learningResources/recentlyAdded?limit=1&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
-  * @apiUse successBody
-  * @apiUse errorBody
-  * @apiParamExample {json} Response:
- {
-    "message": "Learning resources found successfully",
-    "status": 200,
-    "result": [
-        {
-            "title": "Recently Added",
-            "type": "card",
-            "imageUrl": "",
-            "description": "",
-            "viewMoreUrl": "https://dev.bodh.shikshalokam.org/search/Library/1",
-            "totalCount": 12,
-            "resources": [
-                {
-                    "url": "https://dev.bodh.shikshalokam.org/resources/play/content/do_113059738078953472141",
-                    "title": "Layout Quiz",
-                    "description": "Layout Quiz",
-                    "time": "2020-07-08T11:05:08.467+0000"
-                },
-               ]
-        },
-        {
-            "title": "Most Popular",
-            "type": "card",
-            "description": "",
-            "totalCount": 12,
-            "viewMoreUrl": "https://dev.bodh.shikshalokam.org/search/Library/1",
-            "resources": [
-                {
-                    "url": "https://dev.bodh.shikshalokam.org/resources/play/content/do_113069088011886592166",
-                    "appIcon": "https://sldevsunbird.blob.core.windows.net/sl-dev-assets/content/do_113069088011886592166/artifact/bodh-2-01-01-1-1.thumb.png",
-                    "title": "YouTube_Testing",
-                    "description": "YouTube_Testing",
-                    "time": "2020-07-21T16:07:37.702+0000"
-                }
-            ]
-        }
-    ]
-}
-  **/
+**/
 
   /**
    * To get list of recently added learning resources
@@ -258,126 +279,123 @@ module.exports = class LearningResources {
    * @returns {json} Response consists list of learning resource
   */
 
- recentlyAdded(req) {
-  return new Promise(async (resolve, reject) => {
-    try {
+  recentlyAdded(req) {
+    return new Promise(async (resolve, reject) => {
+      try {
 
-      
-      let response = await learningResourceshelper.recentlyAdded(
-        req.userDetails.userToken,
-        req.query.pageSize,
-        req.query.pageNo,
-        req.query.category ? req.query.category : "",
-          req.query.subCategory ? req.query.subCategory : "",
-          req.query.topic ? req.query.topic : "",
-          req.query.language ? req.query.language : ""
+
+        let response = await learningResourceshelper.recentlyAdded(
+          req.userDetails.userToken,
+          req.pageSize,
+          req.pageNo,
+          req.body.filters ? req.body.filters : {}
         );
-      return resolve({ result:response.data,message:response.message });
+        return resolve({ result: response.data, message: response.message });
 
-    } catch (error) {
+      } catch (error) {
 
-      return reject({
-        status:
-          error.status ||
-          HTTP_STATUS_CODE["internal_server_error"].status,
+        return reject({
+          status:
+            error.status ||
+            HTTP_STATUS_CODE["internal_server_error"].status,
 
-        message:
-          error.message ||
-          HTTP_STATUS_CODE["internal_server_error"].message
-      });
-    }
-  });
+          message:
+            error.message ||
+            HTTP_STATUS_CODE["internal_server_error"].message
+        });
+      }
+    });
+  }
+
+  /**
+* @api {get} /library/api/v1/learningResources/filtersList 
+* To get filters list of learning resources
+* @apiVersion 1.0.0
+* @apiGroup Learning Resources
+* @apiHeader {String} X-authenticated-user-token Authenticity token
+* @apiSampleRequest /library/api/v1/learningResources/filtersList
+* @apiUse successBody
+* @apiUse errorBody
+* @apiParamExample {json} Response:
+{
+  "message": "filters fetched successfully",
+  "status": 200,
+  "result": [
+      {
+          "field": "category",
+          "value": "",
+          "visible": true,
+          "editable": true,
+          "label": "Category",
+          "input": "select",
+          "validation": [],
+          "options": [
+              {
+                  "label": "sldev",
+                  "value": "sldev"
+              }
+          ]
+      },
+      {
+          "field": "language",
+          "value": "",
+          "visible": true,
+          "editable": true,
+          "label": "Language",
+          "input": "select",
+          "validation": [],
+          "options": [
+              {
+                  "label": "English",
+                  "value": "english"
+              },
+              {
+                  "label": "Tamil",
+                  "value": "tamil"
+              },
+              {
+                  "label": "Hindi",
+                  "value": "hindi"
+              },
+              {
+                  "label": "Kannada",
+                  "value": "kannada"
+              }
+          ]
+      },
+      {
+          "field": "subCategory",
+          "value": "",
+          "visible": true,
+          "editable": true,
+          "label": "Sub Category",
+          "input": "select",
+          "validation": [],
+          "options": [
+              {
+                  "label": "Class1",
+                  "value": "class1"
+              }
+          ]
+      },
+      {
+          "field": "topic",
+          "value": "",
+          "visible": true,
+          "editable": true,
+          "label": "Topic",
+          "input": "select",
+          "validation": [],
+          "options": [
+              {
+                  "label": "Science",
+                  "value": "science"
+              }
+          ]
+      }
+  ]
 }
-
-    /**
-  * @api {get} /library/api/v1/learningResources/filtersList 
-  * To get filters list of learning resources
-  * @apiVersion 1.0.0
-  * @apiGroup Learning Resources
-  * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library/api/v1/learningResources/filtersList
-  * @apiUse successBody
-  * @apiUse errorBody
-  * @apiParamExample {json} Response:
-  {
-    "message": "filters fetched successfully",
-    "status": 200,
-    "result": [
-        {
-            "field": "category",
-            "value": "",
-            "visible": true,
-            "editable": true,
-            "label": "Category",
-            "input": "select",
-            "validation": [],
-            "options": [
-                {
-                    "label": "sldev",
-                    "value": "sldev"
-                }
-            ]
-        },
-        {
-            "field": "language",
-            "value": "",
-            "visible": true,
-            "editable": true,
-            "label": "Language",
-            "input": "select",
-            "validation": [],
-            "options": [
-                {
-                    "label": "English",
-                    "value": "english"
-                },
-                {
-                    "label": "Tamil",
-                    "value": "tamil"
-                },
-                {
-                    "label": "Hindi",
-                    "value": "hindi"
-                },
-                {
-                    "label": "Kannada",
-                    "value": "kannada"
-                }
-            ]
-        },
-        {
-            "field": "subCategory",
-            "value": "",
-            "visible": true,
-            "editable": true,
-            "label": "Sub Category",
-            "input": "select",
-            "validation": [],
-            "options": [
-                {
-                    "label": "Class1",
-                    "value": "class1"
-                }
-            ]
-        },
-        {
-            "field": "topic",
-            "value": "",
-            "visible": true,
-            "editable": true,
-            "label": "Topic",
-            "input": "select",
-            "validation": [],
-            "options": [
-                {
-                    "label": "Science",
-                    "value": "science"
-                }
-            ]
-        }
-    ]
-}
-  **/
+**/
 
   /**
    * To get filters list
@@ -392,7 +410,7 @@ module.exports = class LearningResources {
       try {
 
         let response = await learningResourceshelper.filtersList(req.userDetails.userToken);
-        return resolve({ result:response.data,message:response.message });
+        return resolve({ result: response.data, message: response.message });
 
       } catch (error) {
 

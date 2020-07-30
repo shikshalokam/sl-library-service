@@ -54,7 +54,7 @@ function callToSunbird(requestType, url, token, requestBody = "") {
                 });
             } else {
 
-                return resolve(JSON.parse(data.body));
+                return resolve(data.body);
             }
         }
 
@@ -77,14 +77,37 @@ function callToSunbird(requestType, url, token, requestBody = "") {
 * @returns {json} Response consists of list of learning resources
 */
 
-const learningResources = function (token, pageSize, pageNo, category, subCategory, topic, language, sortBy) {
+const learningResources = function (token, pageSize, pageNo, filters, sortBy) {
     return new Promise(async (resolve, reject) => {
         try {
-            let learningResourceApiUrl = CONSTANTS.endpoints.GET_RESOURCES_LIST
 
-            learningResourceApiUrl = learningResourceApiUrl + "?limit=" + pageSize + "&page=" + pageNo + "&board="
-                + category + "&gradeLevel=" + subCategory + "&subject=" + topic + "&medium=" + language + "&sortBy=" + sortBy;
-            let response = await callToSunbird("GET", learningResourceApiUrl, token);
+            let learningResourceApiUrl = CONSTANTS.endpoints.GET_RESOURCES_LIST
+            learningResourceApiUrl = learningResourceApiUrl + "?limit=" + pageSize + "&page=" + pageNo + "&sortBy=" + sortBy;
+            let mappedFilterList = {};
+            let filterKeys = Object.keys(filters);
+            
+            if (filterKeys && filterKeys.length > 0) {
+                filterKeys.map(filter => {
+                    let mappingType = "";
+                   
+                    if (filter == "category") {
+                        mappingType = "board"
+                    } else if (filter == "subCategory") {
+                        mappingType = "gradeLevel"
+                    } else if (filter == "topic") {
+                        mappingType = "medium"
+                    } else if (filter == "language") {
+                        mappingType = "subject"
+                    }
+                    mappedFilterList[mappingType] = filters[filter];
+                });
+            }
+
+            let requestBody = {
+                filters: mappedFilterList
+            }
+            
+            let response = await callToSunbird("POST", learningResourceApiUrl, token, requestBody);
             return resolve(response);
         } catch (error) {
             reject({ message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN });
@@ -106,7 +129,7 @@ const filtersList = function (token) {
         try {
             const categoryListApiUrl = CONSTANTS.endpoints.GET_CATEGORY_LIST;
             let response = await callToSunbird("GET", categoryListApiUrl, token);
-            return resolve(response);
+            return resolve(JSON.parse(response));
         } catch (error) {
 
             reject({ message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN });

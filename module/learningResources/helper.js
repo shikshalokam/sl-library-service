@@ -23,18 +23,20 @@ module.exports = class LearningResourcesHelper {
   * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {String} category - categories for the learning resource
-  * @param {String} subCategory - subcategories for the learning resource
-  * @param {String} topic - topic's for the learning resource
-  * @param {String} language - language's of the learning resource
+  * @param {Object} filters - resource filters
+  * @param {Array} filters.category - categories for the learning resource
+  * @param {Array} filters.subCategory - subcategories for the learning resource
+  * @param {Array} filters.topic - topic's for the learning resource
+  * @param {Array} filters.language - language's of the learning resources
+
   * @returns {json} Response consists of list of learning resources
   */
-  static all(token, pageSize, pageNo, category, subCategory, topic, language) {
+  static all(token, pageSize, pageNo, filters) {
     return new Promise(async (resolve, reject) => {
       try {
 
-        let popularResources = await this.popular(token, pageSize, pageNo, category, subCategory, topic, language);
-        let recentResources = await this.recentlyAdded(token, pageSize, pageNo, category, subCategory, topic, language);
+        let popularResources = await this.popular(token, pageSize, pageNo, filters);
+        let recentResources = await this.recentlyAdded(token, pageSize, pageNo, filters);
         let allResources = [];
         if (recentResources && recentResources.data) {
           allResources.push(recentResources.data);
@@ -72,18 +74,19 @@ module.exports = class LearningResourcesHelper {
   * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {String} category - categories for the learning resource
-  * @param {String} subCategory - subcategories for the learning resource
-  * @param {String} topic - topic's for the learning resource
-  * @param {String} language - language's of the learning resource
+  * @param {Object} filters - resource filters
+  * @param {Array} filters.category - categories for the learning resource
+  * @param {Array} filters.subCategory - subcategories for the learning resource
+  * @param {Array} filters.topic - topic's for the learning resource
+  * @param {Array} filters.language - language's of the learning resources
   * @returns {json} Response consists of list of learning resources
   */
-  static popular(token, pageSize, pageNo, category, subcategory, topic, language) {
+  static popular(token, pageSize, pageNo, filters) {
     return new Promise(async (resolve, reject) => {
       try {
 
         let sortBy = CONSTANTS.common.POPULAR_FILTER;
-        let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, category, subcategory, topic, language, sortBy);
+        let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, filters, sortBy);
         if (learningResources && learningResources.result && learningResources.result.content) {
           let resourcesData = [];
 
@@ -133,21 +136,22 @@ module.exports = class LearningResourcesHelper {
 * To get list of recently added learning resources
 * @method
 * @name  recentlyAdded
- * @param {String} token - user access token.
-  * @param {String} pageSize - page size of the request
-  * @param {String} pageNo - page no of the request
-  * @param {String} category - categories for the learning resource
-  * @param {String} subCategory - subcategories for the learning resource
-  * @param {String} topic - topic's for the learning resource
-  * @param {String} language - language's of the learning resources
+* @param {String} token - user access token.
+* @param {String} pageSize - page size of the request
+* @param {String} pageNo - page no of the request
+* @param {Object} filters - resource filters
+* @param {Array} filters.category - categories for the learning resource
+* @param {Array} filters.subCategory - subcategories for the learning resource
+* @param {Array} filters.topic - topic's for the learning resource
+* @param {Array} filters.language - language's of the learning resources
 * @returns {json} Response consists of list of learning resources
 */
-  static recentlyAdded(token, pageSize, pageNo, category, subCategory, topic, language) {
+  static recentlyAdded(token, pageSize, pageNo, filters) {
     return new Promise(async (resolve, reject) => {
       try {
 
         let sortBy = CONSTANTS.common.RECENT_FILTER;
-        let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, category, subCategory, topic, language, sortBy);
+        let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, filters, sortBy);
         if (learningResources && learningResources.result && learningResources.result.content) {
           let resourcesData = [];
           learningResources.result.content.map(resources => {
