@@ -18,19 +18,12 @@ module.exports = class LearningResources {
   }
  
   /**
-  * @api {post} /library/api/v1/learningResources/all
+  * @api {get} /library/api/v1/learningResources/all
   * To get learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library/api/v1/learningResources/all
-  * @apiParamExample {json} Request:
-  * {
-  *     "category":["SLDEV"],
-  *     "subCategory":["Class 1"],
-  *     "topic:["Science"],
-  *     "language":["kannada","English"] 
-  * }
+  * @apiSampleRequest /library/api/v1/learningResources/all?limit=1&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -112,12 +105,12 @@ module.exports = class LearningResources {
 
         let response = await learningResourceshelper.all(
           req.userDetails.userToken,
-          req.body.limit,
-          req.body.page,
-          req.body.category ? req.body.category : "",
-          req.body.subCategory ? req.body.subCategory : "",
-          req.body.topic ? req.body.topic : "",
-          req.body.language ? req.body.language : "" 
+          req.pageSize,
+          req.pageNo,
+          req.query.category ? req.query.category : "",
+          req.query.subCategory ? req.query.subCategory : "",
+          req.query.topic ? req.query.topic : "",
+          req.query.language ? req.query.language : ""
           );
           return resolve({ result:response.data,message:response.message });
 
@@ -138,19 +131,12 @@ module.exports = class LearningResources {
 
 
     /**
-  * @api {post} /library/api/v1/learningResources/popular
+  * @api {get} /library/api/v1/learningResources/popular
   * To get popular learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library/api/v1/learningResources/popular
-  * @apiParamExample {json} Request:
-  * {
-  *     "category":["SLDEV"],
-  *     "subCategory":["Class 1"],
-  *     "topic:["Science"],
-  *     "language":["kannada","English"] 
-  * }
+  * @apiSampleRequest /library/api/v1/learningResources/popular?limit=1&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -189,12 +175,12 @@ module.exports = class LearningResources {
 
       let response = await learningResourceshelper.popular(
         req.userDetails.userToken,
-        req.body.limit,
-        req.body.page,
-        req.body.category ? req.body.category : "",
-        req.body.subCategory ? req.body.subCategory : "",
-        req.body.topic ? req.body.topic : "",
-        req.body.language ? req.body.language : "" 
+        req.query.pageSize,
+        req.query.pageNo,
+        req.query.category ? req.query.category : "",
+        req.query.subCategory ? req.query.subCategory : "",
+        req.query.topic ? req.query.topic : "",
+        req.query.language ? req.query.language : ""
         );
         return resolve({ result:response.data,message:response.message });
 
@@ -215,19 +201,12 @@ module.exports = class LearningResources {
 
 
     /**
-  * @api {post} /library/api/v1/learningResources/recentlyAdded
+  * @api {get} /library/api/v1/learningResources/recentlyAdded
   * To get recently added learning resources
   * @apiVersion 1.0.0
   * @apiGroup Learning Resources
   * @apiHeader {String} X-authenticated-user-token Authenticity token
-  * @apiSampleRequest /library/api/v1/learningResources/recentlyAdded
-  * @apiParamExample {json} Request:
-  * {
-  *     "category":["SLDEV"],
-  *     "subCategory":["Class 1"],
-  *     "topic:["Science"],
-  *     "language":["kannada","English"] 
-  * }
+  * @apiSampleRequest /library/api/v1/learningResources/recentlyAdded?limit=1&page=1&Subcategory=class 1&Category=cbse&&Topic=mathematics
   * @apiUse successBody
   * @apiUse errorBody
   * @apiParamExample {json} Response:
@@ -286,12 +265,12 @@ module.exports = class LearningResources {
       
       let response = await learningResourceshelper.recentlyAdded(
         req.userDetails.userToken,
-        req.body.limit,
-        req.body.page,
-        req.body.category ? req.body.category : "",
-        req.body.subCategory ? req.body.subCategory : "",
-        req.body.topic ? req.body.topic : "",
-        req.body.language ? req.body.language : "" 
+        req.query.pageSize,
+        req.query.pageNo,
+        req.query.category ? req.query.category : "",
+          req.query.subCategory ? req.query.subCategory : "",
+          req.query.topic ? req.query.topic : "",
+          req.query.language ? req.query.language : ""
         );
       return resolve({ result:response.data,message:response.message });
 

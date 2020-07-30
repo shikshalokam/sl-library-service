@@ -23,10 +23,10 @@ module.exports = class LearningResourcesHelper {
   * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {Array} category - array of categories for the learning resource
-  * @param {Array} subCategory - arary subcategories for the learning resource
-  * @param {Array} topic - array of topic's for the learning resource
-  * @param {Array} language - array of language's of the learning resource
+  * @param {String} category - categories for the learning resource
+  * @param {String} subCategory - subcategories for the learning resource
+  * @param {String} topic - topic's for the learning resource
+  * @param {String} language - language's of the learning resource
   * @returns {json} Response consists of list of learning resources
   */
   static all(token, pageSize, pageNo, category, subCategory, topic, language) {
@@ -42,20 +42,20 @@ module.exports = class LearningResourcesHelper {
         if (popularResources && popularResources.data) {
           allResources.push(popularResources.data);
         }
-        if(allResources && allResources.length >0){
+        if (allResources && allResources.length > 0) {
           resolve({
             message: CONSTANTS.apiResponses.LEARNING_RESORCES_FOUND,
             data: allResources,
             success: true
           });
-        }else{
+        } else {
           resolve({
             message: popularResources.message,
             data: false,
             success: true
           });
         }
-        
+
 
       } catch (error) {
         return reject(error);
@@ -72,10 +72,10 @@ module.exports = class LearningResourcesHelper {
   * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {Array} category - array of categories for the learning resource
-  * @param {Array} subCategory - arary subcategories for the learning resource
-  * @param {Array} topic - array of topic's for the learning resource
-  * @param {Array} language - array of language's of the learning resource
+  * @param {String} category - categories for the learning resource
+  * @param {String} subCategory - subcategories for the learning resource
+  * @param {String} topic - topic's for the learning resource
+  * @param {String} language - language's of the learning resource
   * @returns {json} Response consists of list of learning resources
   */
   static popular(token, pageSize, pageNo, category, subcategory, topic, language) {
@@ -86,7 +86,7 @@ module.exports = class LearningResourcesHelper {
         let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, category, subcategory, topic, language, sortBy);
         if (learningResources && learningResources.result && learningResources.result.content) {
           let resourcesData = [];
-          
+
           learningResources.result.content.map(resources => {
 
             let data = {};
@@ -136,10 +136,10 @@ module.exports = class LearningResourcesHelper {
  * @param {String} token - user access token.
   * @param {String} pageSize - page size of the request
   * @param {String} pageNo - page no of the request
-  * @param {Array} category - array of categories for the learning resource
-  * @param {Array} subCategory - arary subcategories for the learning resource
-  * @param {Array} topic - array of topic's for the learning resource
-  * @param {Array} language - array of language's of the learning resources
+  * @param {String} category - categories for the learning resource
+  * @param {String} subCategory - subcategories for the learning resource
+  * @param {String} topic - topic's for the learning resource
+  * @param {String} language - language's of the learning resources
 * @returns {json} Response consists of list of learning resources
 */
   static recentlyAdded(token, pageSize, pageNo, category, subCategory, topic, language) {

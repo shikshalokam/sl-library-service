@@ -160,7 +160,6 @@ module.exports = async function (req, res, next, token = "") {
       }
 
     }).catch(error => {
-      console.log("err",error);
       tokenAuthenticationFailureMessageToSlack(
         req,
         token,
