@@ -4,7 +4,7 @@
   "description": "Integration",
   "main": "app.js",
   "bin": {
-    "migrations": "module/migrations/bin/migrations.js"
+    "library-migrations": "module/migrations/bin/migrations.js"
   },
   "scripts": {
     "test": "mocha --timeout 10000",
