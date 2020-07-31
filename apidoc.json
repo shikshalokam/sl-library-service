@@ -1,7 +1,7 @@
 {
-    "name": "SL-Sunbird-service",
-    "version": "0.0.1",
-    "description": "SL Sunbird API's",
-    "title": "SL Sunbird API's",
+    "name": "SL-Library-service",
+    "version": "1.0.0",
+    "description": "SL Library Service API's",
+    "title": "SL Library API's",
     "url": "https://shikshalokam.org"
 }
