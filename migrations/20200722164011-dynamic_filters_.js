@@ -19,7 +19,7 @@ module.exports = {
         "visible": true,
         "editable": true,
         "label": camelCaseToTitleCase(input),
-        "input": "select",
+        "input": "multiselect",
         "validation": [
         ],
         "options": []
