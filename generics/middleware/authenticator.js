@@ -46,13 +46,18 @@ module.exports = async function (req, res, next, token = "") {
 
 
   // Allow search endpoints for non-logged in users.
+  let guestAccess = false;
   let guestAccessPaths = [];
   await Promise.all(guestAccessPaths.map(async function (path) {
     if (req.path.includes(path)) {
-      next();
-      return;
+      guestAccess = true;
     }
   }));
+  
+  if(guestAccess==true){
+    next();
+    return;
+  }
 
   let internalAccessApiPaths = [];
   let performInternalAccessTokenCheck = false;
