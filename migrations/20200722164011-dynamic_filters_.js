@@ -1,6 +1,6 @@
 module.exports = {
   async up(db) {
-    global.migrationMsg = "Library fiilter form";
+    global.migrationMsg = "Library filter form";
 
     let inputElements = ["category", "language", "subCategory", "topic"];
 

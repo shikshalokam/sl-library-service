@@ -29,7 +29,7 @@ module.exports = class LearningResources {
   *    "filters": {
   *     "category": ["SLDEV"],
   *     "subcategory": ["Class 1"],
-  *     "topic: ["Science"],
+  *     "topic": ["Science"],
   *     "language": ["kannada","English"] 
   *    }
   * }
@@ -103,7 +103,7 @@ module.exports = class LearningResources {
   /**
    * To get list of resources
    * @method
-   * @name list
+   * @name all
    * @param  {req}  - requested data.
    * @returns {json} Response consists list of learning resource
   */
@@ -148,7 +148,7 @@ module.exports = class LearningResources {
 *    "filters": {
 *     "category": ["SLDEV"],
 *     "subcategory": ["Class 1"],
-*     "topic: ["Science"],
+*     "topic": ["Science"],
 *     "language": ["kannada","English"] 
 *    }
 * }
@@ -179,7 +179,7 @@ module.exports = class LearningResources {
   /**
    * To get list of popular learning resources
    * @method
-   * @name list
+   * @name popular
    * @param  {req}  - requested data.
    * @returns {json} Response consists list of learning resource
   */
@@ -213,7 +213,7 @@ module.exports = class LearningResources {
 
 
   /**
-* @api {get} /library/api/v1/learningResources/recentlyAdded
+* @api {post} /library/api/v1/learningResources/recentlyAdded
 * To get recently added learning resources
 * @apiVersion 1.0.0
 * @apiGroup Learning Resources
@@ -224,7 +224,7 @@ module.exports = class LearningResources {
 *    "filters": {
 *     "category": ["SLDEV"],
 *     "subCategory": ["Class 1"],
-*     "topic: ["Science"],
+*     "topic": ["Science"],
 *     "language": ["kannada","English"] 
 *    }
 * }
@@ -274,7 +274,7 @@ module.exports = class LearningResources {
   /**
    * To get list of recently added learning resources
    * @method
-   * @name list
+   * @name recentlyAdded
    * @param  {req}  - requested data.
    * @returns {json} Response consists list of learning resource
   */

@@ -35,15 +35,18 @@ module.exports = class LearningResourcesHelper {
     return new Promise(async (resolve, reject) => {
       try {
 
-        let popularResources = await this.popular(token, pageSize, pageNo, filters);
-        let recentResources = await this.recentlyAdded(token, pageSize, pageNo, filters);
+        let learningResources  = await Promise.all([
+           this.popular(token, pageSize, pageNo, filters),
+           this.recentlyAdded(token, pageSize, pageNo, filters)
+        ]);
+       
         let allResources = [];
-        if (recentResources && recentResources.data) {
-          allResources.push(recentResources.data);
-        }
-        if (popularResources && popularResources.data) {
-          allResources.push(popularResources.data);
-        }
+        learningResources.map(results=>{
+          if(results.data){
+            allResources.push(results.data);
+          }
+        })
+      
         if (allResources && allResources.length > 0) {
           resolve({
             message: CONSTANTS.apiResponses.LEARNING_RESORCES_FOUND,
@@ -51,16 +54,15 @@ module.exports = class LearningResourcesHelper {
             success: true
           });
         } else {
-          resolve({
-            message: popularResources.message,
-            data: false,
-            success: true
-          });
+          throw new Error(CONSTANTS.apiResponses.LEARNING_RESORCES_NOT_FOUND);
         }
-
-
+   
       } catch (error) {
-        return reject(error);
+        resolve({
+          message: error.message,
+          data: false,
+          success: false
+        });
       }
     })
 
@@ -116,11 +118,7 @@ module.exports = class LearningResourcesHelper {
             success: true
           });
         } else {
-          resolve({
-            message: CONSTANTS.apiResponses.LEARNING_RESORCES_NOT_FOUND,
-            success: false,
-            data: false
-          });
+          throw new Error(CONSTANTS.apiResponses.LEARNING_RESORCES_NOT_FOUND);
         }
       } catch (error) {
         resolve({
@@ -181,11 +179,8 @@ module.exports = class LearningResourcesHelper {
             success: true
           });
         } else {
-          resolve({
-            message: CONSTANTS.apiResponses.LEARNING_RESORCES_NOT_FOUND,
-            data: false,
-            success: false
-          });
+          throw new Error(CONSTANTS.apiResponses.LEARNING_RESORCES_NOT_FOUND);
+         
         }
       } catch (error) {
         resolve({
@@ -247,12 +242,8 @@ module.exports = class LearningResourcesHelper {
             success: true
           });
         } else {
-          resolve({
-            message: CONSTANTS.apiResponses.FILTERS_NOT_FOUND,
-            data: false,
-            success: false
-          });
-        }
+          throw new Error(CONSTANTS.apiResponses.FILTERS_NOT_FOUND);
+         }
       } catch (error) {
         resolve({
           message: error.message,

@@ -7,5 +7,6 @@
 
 module.exports = {
     GET_RESOURCES_LIST: "/learningResources/list",
-    GET_CATEGORY_LIST: "/learningResources/filtersList"
+    GET_CATEGORY_LIST: "/learningResources/filtersList",
+    VERIFY_TOKEN: "/token/verify"
 };

@@ -6,14 +6,8 @@
  */
 
 // dependencies
-const jwtDecode = require('jwt-decode');
-const slackClient = require("../helpers/slack-communications");
-const messageUtil = require("./lib/message-util");
-let responseCode = require("../http-status-codes");
-
-
-const sunbird = require("../helpers/sunbird");
-var reqMsg = messageUtil.REQUEST;
+const responseCode = require(GENERICS_FILES_PATH+"/http-status-codes");
+const sunbirdHelper = require(GENERIC_SERVICES_PATH+"/sunbird");
 
 
 var respUtil = function (resp) {
@@ -23,24 +17,6 @@ var respUtil = function (resp) {
     currentDate: new Date().toISOString()
   };
 };
-
-var tokenAuthenticationFailureMessageToSlack = function (req, token, msg) {
-  let jwtInfomration = jwtDecode(token)
-  jwtInfomration["x-authenticated-user-token"] = token
-  const tokenByPassAllowedLog = {
-    method: req.method,
-    url: req.url,
-    headers: req.headers,
-    body: req.body,
-    errorMsg: msg,
-    customFields:
-      jwtInfomration,
-    slackErrorName: process.env.SLACK_ERROR_NAME,
-    color: process.env.SLACK_ERROR_MESSAGE_COLOR
-  }
-
-  slackClient.sendMessageToSlack(tokenByPassAllowedLog)
-}
 
 var removedHeaders = [
   "host",
@@ -57,16 +33,6 @@ var removedHeaders = [
   "cache-control",
   "connection"
 ];
-
-async function getAllRoles(obj) {
-  let roles = await obj.roles;
-  await _.forEach(obj.organisations, async value => {
-    roles = await roles.concat(value.roles);
-  });
-  return roles;
-}
-
-
 
 module.exports = async function (req, res, next, token = "") {
 
@@ -101,13 +67,33 @@ module.exports = async function (req, res, next, token = "") {
       next();
       return;
     } else {
-      rspObj.errCode = reqMsg.TOKEN.MISSING_CODE;
-      rspObj.errMsg = reqMsg.TOKEN.MISSING_MESSAGE;
+      rspObj.errCode = CONSTANTS.apiResponses.TOKEN_MISSING_CODE;
+      rspObj.errMsg = CONSTANTS.apiResponses.TOKEN_MISSING_MESSAGE;
       rspObj.responseCode = responseCode.unauthorized;
       return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
     }
   }
 
+
+  let tokenOrInternalAccessTokenRequiredPaths = [];
+  let tokenOrInternalAccessTokenRequired = false;
+  await Promise.all(tokenOrInternalAccessTokenRequiredPaths.map(async function (path) {
+    if (req.path.includes(path)) {
+      tokenOrInternalAccessTokenRequired = true;
+    }
+  }));
+
+  if (tokenOrInternalAccessTokenRequired) {
+    if (req.headers["internal-access-token"] == process.env.INTERNAL_ACCESS_TOKEN || token) {
+      next();
+      return;
+    } else {
+      rspObj.errCode = CONSTANTS.apiResponses.MISSING_TOKEN_OR_INTERNAL_ACCESS_TOKEN_CODE;
+      rspObj.errMsg = CONSTANTS.apiResponses.MISSING_TOKEN_OR_INTERNAL_ACCESS_TOKEN_MESSAGE;
+      rspObj.responseCode = responseCode.unauthorized;
+      return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
+    }
+  }
 
   let securedApiPaths = [];
   let tokenAndInternalAccessTokenRequired = false;
@@ -122,8 +108,8 @@ module.exports = async function (req, res, next, token = "") {
       next();
       return;
     } else {
-      rspObj.errCode = reqMsg.TOKEN.MISSING_TOKEN_AND_INTERNAL_ACCESS_TOKEN_CODE;
-      rspObj.errMsg = reqMsg.TOKEN.MISSING_TOKEN_AND_INTERNAL_ACCESS_TOKEN_MESSAGE;
+      rspObj.errCode = CONSTANTS.apiResponses.MISSING_TOKEN_AND_INTERNAL_ACCESS_TOKEN_CODE;
+      rspObj.errMsg = CONSTANTS.apiResponses.MISSING_TOKEN_AND_INTERNAL_ACCESS_TOKEN_MESSAGE;
       rspObj.responseCode = responseCode.unauthorized;
       return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
     }
@@ -131,41 +117,28 @@ module.exports = async function (req, res, next, token = "") {
 
 
   if (!token) {
-    rspObj.errCode = reqMsg.TOKEN.MISSING_CODE;
-    rspObj.errMsg = reqMsg.TOKEN.MISSING_MESSAGE;
+    rspObj.errCode = CONSTANTS.apiResponses.TOKEN_MISSING_CODE;
+    rspObj.errMsg = CONSTANTS.apiResponses.TOKEN_MISSING_MESSAGE;
     rspObj.responseCode = responseCode.unauthorized;
     return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
   }
 
-  sunbird
+  sunbirdHelper
     .verifyToken(token)
     .then(async userDetails => {
       if (userDetails.result.isValid == true) {
         req.userDetails = {};
         req.userDetails = userDetails.result;
         req.userDetails['userToken'] = token;
-        req.userDetails['allRoles'] = await getAllRoles(req.userDetails);
         next();
       } else {
-        tokenAuthenticationFailureMessageToSlack(
-          req,
-          token,
-          "TOKEN VERIFICATION - FAILED TO GET USER DETAIL"
-        );
-        rspObj.errCode = reqMsg.TOKEN.INVALID_CODE;
-        rspObj.errMsg = reqMsg.TOKEN.INVALID_MESSAGE;
+        rspObj.errCode = CONSTANTS.apiResponses.TOKEN_INVALID_CODE;
+        rspObj.errMsg = CONSTANTS.apiResponses.TOKEN_INVALID_MESSAGE;
         rspObj.responseCode = responseCode.UNAUTHORIZED_ACCESS;
         return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
-
       }
 
     }).catch(error => {
-      tokenAuthenticationFailureMessageToSlack(
-        req,
-        token,
-        "TOKEN VERIFICATION - ERROR FETCHING USER DETAIL"
-      );
-
       return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(error);
     });
 

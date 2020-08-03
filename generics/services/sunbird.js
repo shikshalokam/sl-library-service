@@ -19,19 +19,23 @@ const request = require('request');
   * @param token - Logged in user token.
   * @param url - url of the api call.
   * @param requestType - http request method
+  * @param internalAccess - access api with internal access token 
   * @returns {JSON} - sunbird service response
 */
 
-function callToSunbird(requestType, url, token, requestBody = "") {
+function callToSunbird(requestType, url, token="", requestBody = "",internalAccess=false) {
     return new Promise(async (resolve, reject) => {
 
         let options = {
             "headers": {
                 "content-type": "application/json",
-                "authorization": process.env.AUTHORIZATION,
-                "x-authenticated-user-token": token
             }
         };
+        if(internalAccess==true){
+            options['headers']["internal-access-token"] = process.env.INTERNAL_ACCESS_TOKEN;
+        }else{
+            options['headers']["x-authenticated-user-token"] = token;
+        }
 
         if (requestType != "GET") {
             options['json'] = requestBody;
@@ -49,11 +53,10 @@ function callToSunbird(requestType, url, token, requestBody = "") {
         function callback(err, data) {
 
             if (err) {
-                return reject({
+                 return reject({
                     message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN
                 });
             } else {
-
                 return resolve(data.body);
             }
         }
@@ -137,8 +140,33 @@ const filtersList = function (token) {
     })
 }
 
+/**
+  * to Varify token is valid or not
+  * @function
+  * @name verifyToken
+  * @param token - user token for verification 
+  * @returns {JSON} - consist of token verification details
+*/
+const verifyToken = function (token) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const verifyTokenEndpoint = CONSTANTS.endpoints.VERIFY_TOKEN;
+
+            let requestBody = {
+                token: token
+            }
+            let response = await callToSunbird("POST", verifyTokenEndpoint, "",requestBody,true);
+            return resolve(response);
+        } catch (error) {
+
+            reject({ message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN });
+        }
+    })
+}
+
 
 module.exports = {
     learningResources: learningResources,
-    filtersList: filtersList
+    filtersList: filtersList,
+    verifyToken: verifyToken
 };
