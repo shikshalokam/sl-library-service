@@ -6,7 +6,6 @@
  */
 
 // dependencies
-const responseCode = require(GENERICS_FILES_PATH+"/http-status-codes");
 const sunbirdHelper = require(GENERIC_SERVICES_PATH+"/sunbird");
 
 
