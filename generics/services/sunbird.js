@@ -19,21 +19,19 @@ const request = require('request');
   * @param token - Logged in user token.
   * @param url - url of the api call.
   * @param requestType - http request method
-  * @param internalAccess - access api with internal access token 
   * @returns {JSON} - sunbird service response
 */
 
-function callToSunbird(requestType, url, token="", requestBody = "",internalAccess=false) {
+function callToSunbird(requestType, url, token="", requestBody = "") {
     return new Promise(async (resolve, reject) => {
 
         let options = {
             "headers": {
                 "content-type": "application/json",
+                "internal-access-token":process.env.INTERNAL_ACCESS_TOKEN
             }
         };
-        if(internalAccess==true){
-            options['headers']["internal-access-token"] = process.env.INTERNAL_ACCESS_TOKEN;
-        }else{
+        if(token){
             options['headers']["x-authenticated-user-token"] = token;
         }
 
@@ -155,7 +153,7 @@ const verifyToken = function (token) {
             let requestBody = {
                 token: token
             }
-            let response = await callToSunbird("POST", verifyTokenEndpoint, "",requestBody,true);
+            let response = await callToSunbird("POST", verifyTokenEndpoint, "",requestBody);
             return resolve(response);
         } catch (error) {
 

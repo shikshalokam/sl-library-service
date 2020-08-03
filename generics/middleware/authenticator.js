@@ -45,6 +45,7 @@ module.exports = async function (req, res, next, token = "") {
   var rspObj = req.rspObj;
 
 
+
   // Allow search endpoints for non-logged in users.
   let guestAccess = false;
   let guestAccessPaths = [];
@@ -74,7 +75,7 @@ module.exports = async function (req, res, next, token = "") {
     } else {
       rspObj.errCode = CONSTANTS.apiResponses.TOKEN_MISSING_CODE;
       rspObj.errMsg = CONSTANTS.apiResponses.TOKEN_MISSING_MESSAGE;
-      rspObj.responseCode = responseCode.unauthorized;
+      rspObj.responseCode = HTTP_STATUS_CODE['unauthorized'].status;
       return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
     }
   }
@@ -95,7 +96,7 @@ module.exports = async function (req, res, next, token = "") {
     } else {
       rspObj.errCode = CONSTANTS.apiResponses.MISSING_TOKEN_OR_INTERNAL_ACCESS_TOKEN_CODE;
       rspObj.errMsg = CONSTANTS.apiResponses.MISSING_TOKEN_OR_INTERNAL_ACCESS_TOKEN_MESSAGE;
-      rspObj.responseCode = responseCode.unauthorized;
+      rspObj.responseCode = HTTP_STATUS_CODE["unauthorized"].status;
       return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
     }
   }
@@ -115,7 +116,7 @@ module.exports = async function (req, res, next, token = "") {
     } else {
       rspObj.errCode = CONSTANTS.apiResponses.MISSING_TOKEN_AND_INTERNAL_ACCESS_TOKEN_CODE;
       rspObj.errMsg = CONSTANTS.apiResponses.MISSING_TOKEN_AND_INTERNAL_ACCESS_TOKEN_MESSAGE;
-      rspObj.responseCode = responseCode.unauthorized;
+      rspObj.responseCode = HTTP_STATUS_CODE['unauthorized'].status;
       return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
     }
   }
@@ -124,7 +125,7 @@ module.exports = async function (req, res, next, token = "") {
   if (!token) {
     rspObj.errCode = CONSTANTS.apiResponses.TOKEN_MISSING_CODE;
     rspObj.errMsg = CONSTANTS.apiResponses.TOKEN_MISSING_MESSAGE;
-    rspObj.responseCode = responseCode.unauthorized;
+    rspObj.responseCode = HTTP_STATUS_CODE["unauthorized"].status;
     return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
   }
 
@@ -139,7 +140,7 @@ module.exports = async function (req, res, next, token = "") {
       } else {
         rspObj.errCode = CONSTANTS.apiResponses.TOKEN_INVALID_CODE;
         rspObj.errMsg = CONSTANTS.apiResponses.TOKEN_INVALID_MESSAGE;
-        rspObj.responseCode = responseCode.UNAUTHORIZED_ACCESS;
+        rspObj.responseCode = HTTP_STATUS_CODE["unauthorized"].status;
         return res.status(HTTP_STATUS_CODE["unauthorized"].status).send(respUtil(rspObj));
       }
 
