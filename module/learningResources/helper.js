@@ -36,8 +36,8 @@ module.exports = class LearningResourcesHelper {
       try {
 
         let learningResources  = await Promise.all([
-           this.popular(token, pageSize, pageNo, filters),
-           this.recentlyAdded(token, pageSize, pageNo, filters)
+          this.recentlyAdded(token, pageSize, pageNo, filters),
+          this.popular(token, pageSize, pageNo, filters),
         ]);
        
         let allResources = [];
