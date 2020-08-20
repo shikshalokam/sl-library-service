@@ -1,7 +1,7 @@
 {
   "name": "shikshalokam-library-services",
   "version": "1.0.0",
-  "description": "Integration",
+  "description": "shikshalokam library",
   "main": "app.js",
   "bin": {
     "library-migrations": "module/migrations/bin/migrations.js"
