@@ -1,5 +1,5 @@
 {
-  "name": "sl-integrations-services",
+  "name": "shikshalokam-library-services",
   "version": "1.0.0",
   "description": "Integration",
   "main": "app.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shikshalokam/sl-integrations-services.git"
+    "url": "git+https://github.com/shikshalokam/sl-library-services.git"
   },
   "keywords": [
     "shikshalokam"
@@ -21,9 +21,9 @@
   "author": "Shikshalokam <info@shikshalokam.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/shikshalokam/sl-integrations-services/issues"
+    "url": "https://github.com/shikshalokam/sl-library-services/issues"
   },
-  "homepage": "https://github.com/shikshalokam/sl-integrations-services#readme",
+  "homepage": "https://github.com/shikshalokam/sl-library-services#readme",
   "dependencies": {
     "async": "^3.2.0",
     "body-parser": "^1.19.0",
