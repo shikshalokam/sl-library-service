@@ -17,6 +17,18 @@ module.exports = class LearningResources {
     return "learningResources";
   }
 
+
+    /**
+* @apiDefine errorBody
+* @apiError {String} status 4XX,5XX
+* @apiError {String} message Error
+*/
+  /**
+    * @apiDefine successBody
+    * @apiSuccess {String} status 200
+    * @apiSuccess {String} result Data
+ */
+
   /**
   * @api {post} /library/api/v1/learningResources/all
   * To get learning resources
