@@ -8,6 +8,9 @@
 const sunbirdService =
   require(GENERIC_SERVICES_PATH + "/sunbird");
 
+  const kendraService =
+  require(GENERIC_SERVICES_PATH + "/kendra");
+
 /**
 * Learning resource related information be here.
 * @method
@@ -88,7 +91,7 @@ module.exports = class LearningResourcesHelper {
       try {
 
         let sortBy = CONSTANTS.common.POPULAR_FILTER;
-        let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, filters, sortBy);
+        let learningResources = await kendraService.learningResources(token, pageSize, pageNo, filters, sortBy);
         if (learningResources && learningResources.result && learningResources.result.content) {
           let resourcesData = [];
 
@@ -149,7 +152,7 @@ module.exports = class LearningResourcesHelper {
       try {
 
         let sortBy = CONSTANTS.common.RECENT_FILTER;
-        let learningResources = await sunbirdService.learningResources(token, pageSize, pageNo, filters, sortBy);
+        let learningResources = await kendraService.learningResources(token, pageSize, pageNo, filters, sortBy);
         if (learningResources && learningResources.result && learningResources.result.content) {
           let resourcesData = [];
           learningResources.result.content.map(resources => {

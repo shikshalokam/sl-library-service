@@ -54,6 +54,14 @@ let enviromentVariables = {
     "message" : "Required sunbird service base url",
     "optional" : false
   },
+  "KENDRA_SERIVCE_HOST" : {
+    "message" : "Required kendra service host",
+    "optional" : false
+  },
+  "KENDRA_SERIVCE_BASE_URL" : {
+    "message" : "Required kendra service base url",
+    "optional" : false
+  },
   "SUNBIRD_URL" : {
     "message" : "Required sunbird url",
     "optional" : false

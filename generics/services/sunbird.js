@@ -64,61 +64,6 @@ function callToSunbird(requestType, url, token="", requestBody = "") {
 
 
 /**
-* To get list of learning resources
-* @method
-* @name  learningResources
-* @param {String} token - user access token.
-* @param {String} pageSize - page size of the request
-* @param {String} pageNo - page no of the request
-* @param {String} category - category for the learning resource
-* @param {String} subCategory - subcategory for the learning resource
-* @param {String} topic -  topic for the learning resource
-* @param {String} language - language for the learning resource
-* @param {String} sortBy - sortBy option for the learning resource
-* @returns {json} Response consists of list of learning resources
-*/
-
-const learningResources = function (token, pageSize, pageNo, filters, sortBy) {
-    return new Promise(async (resolve, reject) => {
-        try {
-
-            let learningResourceApiUrl = CONSTANTS.endpoints.GET_RESOURCES_LIST
-            learningResourceApiUrl = learningResourceApiUrl + "?limit=" + pageSize + "&page=" + pageNo + "&sortBy=" + sortBy;
-            let mappedFilterList = {};
-            let filterKeys = Object.keys(filters);
-            
-            if (filterKeys && filterKeys.length > 0) {
-                filterKeys.map(filter => {
-                    let mappingType = "";
-                   
-                    if (filter == "category") {
-                        mappingType = "board"
-                    } else if (filter == "subCategory") {
-                        mappingType = "gradeLevel"
-                    } else if (filter == "topic") {
-                        mappingType = "medium"
-                    } else if (filter == "language") {
-                        mappingType = "subject"
-                    }
-                    mappedFilterList[mappingType] = filters[filter];
-                });
-            }
-
-            let requestBody = {
-                filters: mappedFilterList
-            }
-            
-            let response = await callToSunbird("POST", learningResourceApiUrl, token, requestBody);
-            return resolve(response);
-        } catch (error) {
-            reject({ message: CONSTANTS.apiResponses.SUNBIRD_SERVICE_DOWN });
-        }
-
-
-    })
-}
-
-/**
   * Get filters of learning resources
   * @function
   * @name filtersList
@@ -164,7 +109,6 @@ const verifyToken = function (token) {
 
 
 module.exports = {
-    learningResources: learningResources,
     filtersList: filtersList,
     verifyToken: verifyToken
 };
